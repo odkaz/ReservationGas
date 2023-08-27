@@ -7,6 +7,7 @@
   <style>
   body { text-align: center;background: cornflowerblue;}
   img { width: 50px;border-radius: 50px;}
+  p {cursor: pointer;}
   input { border: 2px solid whitesmoke;border-radius: 20px; padding: 12px 10px; text-align: center; width: 250px;}
   button { border: none; border-radius: 10px; padding: 12px 10px; text-align: center; cursor: pointer;  background: coral; color: whitesmoke;}
   </style>
@@ -14,19 +15,19 @@
   <body>
     <div>
       <h2>Basic DateTime</h2>
-      <input type="text" id="basicDate" placeholder="Please select Date Time" data-input>
+      <input type="text" id="datePicker" placeholder="Please select Date Time" data-input>
     </div>
     <div id="slotList">
 
     </div>
     <div>
-      <button class="input-button" title="clear" data-clear>Submit</button>
+      <button onclick="submitReservation()" class="submit-btn">Submit</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
     <script>
-      $("#basicDate").flatpickr({
+      $("#datePicker").flatpickr({
           enableTime: false,
           dateFormat: "F, d Y",
           onChange: () => getTimeSlots()
@@ -35,11 +36,29 @@
 
 
       const getTimeSlots = () => {
-        const date = $("#basicDate").val();
+        // const date = $("#datePicker").val();
         $("#slotList").html("");
-        $("#slotList").append(`<p>${date}</p>`);
+        let slotTimes = ['00:00PM', '01:00PM', '18:00PM', '19:00PM'];
+        for(i = 0; i < slotTimes.length; i++) {
+          $("#slotList").append(`<p>${slotTimes[i]}</p>`);
+        }
+        // console.log(date);
+      }
 
-          console.log(date);
+      const submitReservation = () => {
+        const date = $("#datePicker").val();
+        const time = '19:00:00 PM';
+        const dataToSend = {
+          date, time,
+        }
+        // showButtonLoader('submitBtn');
+        google.script.run.withSuccessHandler(slotBooked)
+          .bookSlot(dataToSend);
+        console.log('form submitted');
+      }
+
+      const slotBooked = (error) => {
+        
       }
     </script>
   </body>
