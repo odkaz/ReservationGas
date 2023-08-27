@@ -19,35 +19,32 @@
     padding: 40px;
     margin: 40px;
   }
-  /* input { border: 2px solid whitesmoke;border-radius: 10px; padding: 12px 10px; text-align: center; width: 250px;} */
-  /* button { border: none; border-radius: 10px; padding: 12px 10px; text-align: center; cursor: pointer;  background: coral; color: whitesmoke;} */
   </style>
   </head>
   <body>
     <div class="form-container">
-      <form onsubmit="submitReservation()">
+      <form>
         <div class="mb-3">
-          <label for="InputDate" class="form-label">Resevation date</label>
+          <label for="datePicker" class="form-label">Resevation date</label>
           <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
         </div>
         <div class="mb-3">
-          <label for="InputEmail" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp">
-          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          <label for="selectNumber" class="form-label">Seats</label>
+          <select id="selectNumber" class="form-select" aria-label="Default select example">
+            <option selected>Please select number of seats</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+          </select>
         </div>
-        <div class="mb-3">
-          <label for="InputPassword" class="form-label">Password</label>
-          <input type="password" class="form-control" id="InputPassword">
-        </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="Check">
-          <label class="form-check-label" for="Check">Check me out</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" onClick="getTimeSlots()" class="btn btn-dark">Search</button>
       </form>
     </div>
-
-
     <div id="slotList">
 
     </div>
@@ -79,10 +76,7 @@
         const dataToSend = {
           name, date, time,
         }
-        console.log(date);
-        console.log(dataToSend);
 
-        // showButtonLoader('submitBtn');
         google.script.run.withSuccessHandler(slotBooked)
           .addReservation(dataToSend);
         console.log('form submitted');
