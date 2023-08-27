@@ -13,43 +13,50 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/themes/dark.css">
   <style>
-  .form-container {
-    border: 2px solid whitesmoke;
-    border-radius: 10px;
-    padding: 40px;
-    margin: 40px;
-  }
+    body {
+      padding: 40px;
+    }
+    .form-container {
+
+    }
+    .date-container {
+      border: 2px solid whitesmoke;
+      border-radius: 10px;
+      padding: 40px;
+    }
   </style>
   </head>
   <body>
     <div class="form-container">
       <form>
-        <div class="mb-3">
-          <label for="datePicker" class="form-label">Resevation date</label>
-          <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
+        <div class="date-container">
+          <div class="mb-3">
+            <label for="datePicker" class="form-label">Resevation date</label>
+            <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
+          </div>
+          <div class="mb-3">
+            <label for="selectNumber" class="form-label">Seats</label>
+            <select id="selectNumber" class="form-select" aria-label="Default select example">
+              <option selected>Please select number of seats</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+            </select>
+          </div>
+          <button type="button" onClick="getTimeSlots()" class="btn btn-dark">Search</button>
         </div>
-        <div class="mb-3">
-          <label for="selectNumber" class="form-label">Seats</label>
-          <select id="selectNumber" class="form-select" aria-label="Default select example">
-            <option selected>Please select number of seats</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-          </select>
+        <div id="slotContainer" class="slot-container">
         </div>
-        <button type="button" onClick="getTimeSlots()" class="btn btn-dark">Search</button>
-      </form>
-    </div>
-    <div id="slotList">
 
-    </div>
-    <div>
-      <button onclick="submitReservation()" class="submit-btn">Submit</button>
+      </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -58,25 +65,42 @@
       $("#datePicker").flatpickr({
           enableTime: false,
           dateFormat: "F, d Y",
-          onChange: () => getTimeSlots()
+          onChange: () => clearSlots()
       });
 
+      const clearSlots = () => {
+        $("#slotContainer").html(``);
+      }
+
       const getTimeSlots = () => {
-        $("#slotList").html("");
-        let slotTimes = ['00:00PM', '01:00PM', '18:00PM', '19:00PM'];
+        console.log('called');
+        $("#slotContainer").html(`
+          <label for="lunchSlots" class="form-label mt-4">Lunch</label>
+          <div id="lunchSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          </div>
+          <label for="dinnerSlots" class="form-label mt-4">Dinner</label>
+          <div id="dinnerSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          </div>`
+        );
+
+        let slotTimes = ['12:00', '18:00', '20:15'];
         for(i = 0; i < slotTimes.length; i++) {
-          $("#slotList").append(`<p>${slotTimes[i]}</p>`);
+          if (i < 1) {
+            $("#lunchSlots").append(`<button type="button" onclick="submitReservation(${i})" class="btn btn-outline-dark">${slotTimes[i]}</button>`);
+          } else {
+            $("#dinnerSlots").append(`<button type="button" onclick="submitReservation(${i})" class="btn btn-outline-dark">${slotTimes[i]}</button>`);
+          }
         }
       }
 
-      const submitReservation = () => {
+      const submitReservation = (i) => {
+        let slotTimes = ['12:00:00', '18:00:00', '20:15:00'];
         const name = 'Noda';
         const date = $("#datePicker").val();
-        const time = '19:00:00';
+        const time = slotTimes[i];
         const dataToSend = {
           name, date, time,
         }
-
         google.script.run.withSuccessHandler(slotBooked)
           .addReservation(dataToSend);
         console.log('form submitted');
