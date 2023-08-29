@@ -85,7 +85,6 @@
       }
 
       const getTimeSlots = () => {
-        console.log('called');
         $("#slotContainer").html(`
           <label for="lunchSlots" class="form-label mt-4">Lunch</label>
           <div id="lunchSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -94,56 +93,49 @@
           <div id="dinnerSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
           </div>`
         );
-        let date = getTimestampFromDate($("#datePicker").val());
-        console.log(date);
-        let slotTimes = google.script.run.withSuccessHandler(gotSlots).getAvailableSlots({date});
-        // let slotTimes = ['12:00', '18:00', '20:15'];
-        for (i = 0; i < )
-        for(i = 0; i < slotTimes.length; i++) {
-          if (i < 1) {
-            $("#lunchSlots").append(`<button type="button" onclick="submitReservation(${i})" class="btn btn-outline-dark">${slotTimes[i]}</button>`);
-          } else {
-            $("#dinnerSlots").append(`<button type="button" onclick="submitReservation(${i})" class="btn btn-outline-dark">${slotTimes[i]}</button>`);
-          }
-        }
+        console.log($("#datePicker").val());
+        google.script.run.withSuccessHandler(gotSlots).getAvailableSlots($("#datePicker").val());
+      //       showLoaderScreen();
       }
 
-      // const getTimeSlots = () => {
-      //       const date = getTimestampFromDate($("#date").val());
-      //       google.script.run.withSuccessHandler(gotSlots)
-      //           .getAvailableTimeslots({ date });
-      //       showLoaderScreen();
-      //       const dt = new Date(date);
-      //       const dtArr = dt.toString().split(" ");
-      //       const dateStr = `${dtArr[0]} ${dtArr[1]} ${dtArr[2]} ${dtArr[3]}`
-      //       $("#selectedDate").text(dateStr);
-      //   }
-
         function gotSlots(result) {
-            const { slots } = JSON.parse(result);
-            setSlots(slots);
-            // hideLoaderScreen();
+          const slots = JSON.parse(result);
+          setSlots(slots);
+          // hideLoaderScreen();
+        }
+
+        function displayTime(stamp) {
+          let d = new Date(stamp);
+          let hr = d.getUTCHours();
+          let min = d.getUTCMinutes();
+          if (min < 10) {
+            min = "0" + min;
+          }
+          return hr + ':' + min;
         }
 
         function setSlots(slots) {
-            const $timeSlotsCon = $("#timeSlotsCon");
-            if (!slots.length) {
-                $timeSlotsCon.html('<div class="text-center text-lg md:text-xl font-medium">No Slots Available<div>');
-                $("#inpCon").hide(200);
-                return
+          //lunch slots
+          if (slots.lunch.length == 0) {
+            $("#lunchSlots").append(`<div>No Slots Available</div>`);
+          } else {
+            for (i = 0; i < slots.lunch.length; i++) {
+              $("#lunchSlots").append(`<button type="button" onclick="submitReservation(${slots.lunch[i]})" class="btn btn-outline-dark">${displayTime(slots.lunch[i])}</button>`);
             }
-            $timeSlotsCon.html('')
-            for (let i = 0; i < slots.length; i++) {
-                $timeSlotsCon.append(getSlot(slots[i]));
+          }
+          //dinner slots
+          if (slots.dinner.length == 0) {
+            $("#dinnerSlots").append(`<div>No Slots Available</div>`);
+          } else {
+            for (i = 0; i < slots.dinner.length; i++) {
+              $("#dinnerSlots").append(`<button type="button" onclick="submitReservation(${slots.dinner[i]})" class="btn btn-outline-dark">${displayTime(slots.dinner[i])}</button>`);
             }
-            $("#inpCon").show(200);
+          }
         }
 
-      const submitReservation = (i) => {
-        let slotTimes = ['12:00:00', '18:00:00', '20:15:00'];
+      const submitReservation = (time) => {
         const name = 'Noda';
         const date = $("#datePicker").val();
-        const time = slotTimes[i];
         const dataToSend = {
           name, date, time,
         }

@@ -12,29 +12,40 @@ function addReservation(data) {
   sheet.appendRow([data.name, data.date, data.time]);
 }
 
-function getReservedTimeSlots() {
-  let date = [new Date('August 25, 2023 00:00:00 GMT+02:00')];
-  console.log(date);
-  let sheet = SpreadsheetApp.getActive().getSheetByName('history');
-  let column = 2; //column Index   
-  let columnValues = sheet.getRange(2, column, sheet.getLastRow()).getValues(); //1st is header row
-  let searchResult = columnValues.findIndex(date); //Row Index - 2
-  console.log('fin');
-  if(searchResult != -1)
-  {
-    console.log('success');
-    console.log(searchResult);
-    // SpreadsheetApp.getActiveSpreadsheet().setActiveRange(sheet.getRange(searchResult + 2, 1))
-  }
+function getAvailableSlots(data) {
+  let shifts = getShifts(new Date(data));
+  return JSON.stringify(shifts);
 }
 
-Array.prototype.findIndex = function(search){
+function getShifts(date) {
+  let day = date.getDay();
+  let shifts = SpreadsheetApp.getActive().getSheetByName('shifts');
+  let columnValues = shifts.getRange(2, day + 2, shifts.getLastRow()).getValues();
+  let lunch = [];
+  let dinner = [];
+  for (var i=0; i<columnValues.length; i++) {
+    if (columnValues[i][0]) {
+      if (i < 5) {
+        lunch.push(columnValues[i][0]);
+      } else {
+        dinner.push(columnValues[i][0]);
+      }
+    }
+  }
+  let slots = {
+    lunch,
+    dinner,
+  }
+  return slots;
+}
+
+Array.prototype.findByDate = function(search){
+  let res = [];
   if(search == "") return false;
   for (var i=0; i<this.length; i++) {
-    console.log(this[i]);
-    console.log(search);
-    console.log(this[i] == search);
-    if (this[i] == search) return i;
+    if (!(this[i] > search) && !(this[i] < search)) {
+      res.push(this[i]);
+    }
   }
-  return -1;
+  return res;
 } 
