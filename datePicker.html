@@ -139,11 +139,20 @@
           }
         }
 
+      function getDateString(date) {
+        const currentDate = new Date(date);
+        const currentDayOfMonth = currentDate.getDate();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+        const dateString = (currentMonth + 1) + "/" + currentDayOfMonth + "/" + currentYear;
+        return dateString;
+      }
+
       const submitReservation = (data) => {
         console.log(data);
         let time = displayTime(data);
         const name = 'Noda';
-        const date = $("#datePicker").val();
+        const date = getDateString($("#datePicker").val());
         const dataToSend = {
           name, date, time,
         }

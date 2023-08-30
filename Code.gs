@@ -12,12 +12,44 @@ function addReservation(data) {
   sheet.appendRow([data.name, data.date, data.time]);
 }
 
-function getAvailableSlots(data) {
-  let shifts = getShifts(new Date(data));
+function getAvailableSlots() {
+  let data = 'September, 01 2023';
+  let date = new Date(data);
+  let shifts = getShifts(date);
   return JSON.stringify(shifts);
 }
 
+function getDateString(date) {
+  const currentDate = new Date(date);
+  const currentDayOfMonth = currentDate.getDate();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+  const dateString = (currentMonth + 1) + "/" + currentDayOfMonth + "/" + currentYear;
+  return dateString;
+}
+
+function isSameDate(a, b) {
+  if (getDateString(a) == getDateString(b)) {
+    return true;
+  }
+  return false;
+}
+
+function getReserved(date) {
+  let search = new Date(date);
+  let shifts = SpreadsheetApp.getActive().getSheetByName('history');
+  let column = 2;
+  let columnValues = shifts.getRange(2, column, shifts.getLastRow()).getValues();
+  for (var i=0; i<columnValues.length; i++) {
+    let cmp = new Date(columnValues[i][0]);
+    if (isSameDate(cmp, search)) {
+      console.log('match');
+    }
+  }
+}
+
 function getShifts(date) {
+  getReserved(date);
   let day = date.getDay();
   let shifts = SpreadsheetApp.getActive().getSheetByName('shifts');
   let columnValues = shifts.getRange(2, day + 2, shifts.getLastRow()).getValues();
