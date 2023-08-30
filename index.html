@@ -1,43 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <title>Using Flatpickr</title>
-  (html comment removed:   Flatpicker Styles  )
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/themes/dark.css">
-  <style>
-  body { text-align: center;background: cornflowerblue;}
-  img { width: 50px;border-radius: 50px;}
-  input { border: 2px solid whitesmoke;border-radius: 20px; padding: 12px 10px; text-align: center; width: 250px;}
-  button { border: none; border-radius: 10px; padding: 12px 10px; text-align: center; cursor: pointer;  background: coral; color: whitesmoke;}
-  </style>
-  </head>
-  <body>
-  <img src="https://chmln.github.io/flatpickr/images/logo.png" alt="flatpickr">
-    <h1>Flatpickr</h1>
-    <hr>
-    <div>
-      <h2>Basic DateTime</h2>
-      <input type="text" id="basicDate" placeholder="Please select Date Time" data-input>
-      <h2>Range Datetime</h2>
-      <input type="text" id="rangeDate" placeholder="Please select Date Range" data-input>
-      <h2>Time Picker</h2>
-      <input type="text" id="timePicker" placeholder="Please select Time">
-    </div>
-    <h2>Week Number with Reset Date</h2>
-    <div class=resetDate>
-      <input type="text" placeholder="Select Date.." data-input>
-      <button class="input-button" title="clear" data-clear>RESET</button>
-  </div>
-      (html comment removed:  jQuery )
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    (html comment removed:   Flatpickr  )
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
+    <base target="_top">
     <script>
-  $("#basicDate").flatpickr({
-      enableTime: true,
-      dateFormat: "F, d Y H:i"
-  });
+    function Link1()
+    {
+      var firstname = document.getElementById("firstname").value;
+      var lastname = document.getElementById("lastname").value;
+          
+      var url = document.getElementById("url").value;
+      var link = document.createElement('a');
+      link.href = url+"?firstname="+firstname+"&lastname="+lastname+"&page=Link 1";
+      link.id = 'linkURL';
+      document.body.appendChild(link);
+      document.getElementById("linkURL").click();        
+
+    }
+    function Link2()
+    {
+      var firstname = document.getElementById("firstname").value;
+      var lastname = document.getElementById("lastname").value;
+          
+      var url = document.getElementById("url").value;
+      var link = document.createElement('a');
+      link.href = url+"?firstname="+firstname+"&lastname="+lastname+"&page=Link 2";
+      link.id = 'linkURL';
+      document.body.appendChild(link);
+      document.getElementById("linkURL").click();        
+    }
     </script>
+  </head>
+   <body>
+      <h1>Main Menu</h1>
+      <input type="button" value="Link 1" onclick="Link1()" /><br>
+      <input type="button" value="Link 2" onclick="Link2()" /><br><br>
+      <label>First Name</label><br>
+      <input type="text" id="firstname" /><br>
+      <label> Last Name</label><br>
+      <input type="text" id="lastname" /><br><br> 
+      <span><?= message ?></span>
+      <?var url = getUrl();?><input type="hidden" value="<?= url ?>" id="url" />
   </body>
 </html>
