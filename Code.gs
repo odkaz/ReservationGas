@@ -1,5 +1,40 @@
-function doGet() {
-  return HtmlService.createHtmlOutputFromFile('reservationForm');
+// function doGet() {
+//   return HtmlService.createHtmlOutputFromFile('reservationForm');
+// }
+
+function doGet(e) {
+  if (!e.parameter.page) 
+  {
+    var htmlOutput =  HtmlService.createTemplateFromFile('reservationForm');
+    htmlOutput.message = '';
+    return htmlOutput.evaluate();
+  }
+  else if(e.parameter['page'] == 'personalInfo')
+  {
+    var htmlOutput =  HtmlService.createTemplateFromFile('personalInfo');
+    htmlOutput.date = e.parameter['date'];
+    // htmlOutput.lastname = e.parameter['lastname'];
+    return htmlOutput.evaluate();  
+  }
+  else if(e.parameter['page'] == 'Link 2')
+  {
+    var htmlOutput =  HtmlService.createTemplateFromFile('formSubmitted');
+    htmlOutput.firstname = e.parameter['firstname'];
+    htmlOutput.lastname = e.parameter['lastname'];
+    return htmlOutput.evaluate();  
+  } 
+  else if(e.parameter['page'] == 'Index')
+  {
+    var htmlOutput =  HtmlService.createTemplateFromFile('reservationForm');
+    htmlOutput.message = e.parameter['message'];
+    return htmlOutput.evaluate();  
+  }   
+}
+
+
+function getUrl() {
+ var url = ScriptApp.getService().getUrl();
+ return url;
 }
 
 function addReservation(data) {
