@@ -120,7 +120,10 @@
             $("#lunchSlots").append(`<div>No Slots Available</div>`);
           } else {
             for (i = 0; i < slots.lunch.length; i++) {
-              $("#lunchSlots").append(`<button type="button" onclick="submitReservation(${slots.lunch[i]})" class="btn btn-outline-dark">${displayTime(slots.lunch[i])}</button>`);
+              $("#lunchSlots").append(`<button id="lunchSlot-${i}" type="button" class="btn btn-outline-dark">${displayTime(slots.lunch[i])}</button>`);
+              $(`#lunchSlot-${i}`).on("click", {'param': slots.lunch[i]}, function(e) {
+                submitReservation(e.data.param);
+              });
             }
           }
           //dinner slots
@@ -128,12 +131,17 @@
             $("#dinnerSlots").append(`<div>No Slots Available</div>`);
           } else {
             for (i = 0; i < slots.dinner.length; i++) {
-              $("#dinnerSlots").append(`<button type="button" onclick="submitReservation(${slots.dinner[i]})" class="btn btn-outline-dark">${displayTime(slots.dinner[i])}</button>`);
+              $("#dinnerSlots").append(`<button id="dinnerSlot-${i}" type="button" class="btn btn-outline-dark">${displayTime(slots.dinner[i])}</button>`);
+              $(`#dinnerSlot-${i}`).on("click", {'param': slots.dinner[i]}, function(e) {
+                submitReservation(e.data.param);
+              });
             }
           }
         }
 
-      const submitReservation = (time) => {
+      const submitReservation = (data) => {
+        console.log(data);
+        let time = displayTime(data);
         const name = 'Noda';
         const date = $("#datePicker").val();
         const dataToSend = {
