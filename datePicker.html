@@ -174,23 +174,6 @@
         document.body.appendChild(link);
         document.getElementById("linkURL").click();
       }
-
-      const submitReservation = (data) => {
-        console.log(data);
-        let time = formatTime(data);
-        const name = 'Noda';
-        const date = getDateString($("#datePicker").val());
-        const dataToSend = {
-          name, date, time,
-        }
-        google.script.run.withSuccessHandler(slotBooked)
-          .addReservation(dataToSend);
-        console.log('form submitted');
-      }
-
-      const slotBooked = (error) => {
-        
-      }
     </script>
   </body>
 </html>

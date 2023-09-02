@@ -1,7 +1,3 @@
-// function doGet() {
-//   return HtmlService.createHtmlOutputFromFile('reservationForm');
-// }
-
 function doGet(e) {
   if (!e.parameter.page) 
   {
@@ -13,7 +9,8 @@ function doGet(e) {
   {
     var htmlOutput =  HtmlService.createTemplateFromFile('personalInfo');
     htmlOutput.date = e.parameter['date'];
-    // htmlOutput.lastname = e.parameter['lastname'];
+    htmlOutput.time = e.parameter['time'];
+    htmlOutput.seats = e.parameter['seats'];
     return htmlOutput.evaluate();  
   }
   else if(e.parameter['page'] == 'Link 2')
@@ -39,12 +36,7 @@ function getUrl() {
 
 function addReservation(data) {
   let sheet = SpreadsheetApp.getActive().getSheetByName('history');
-  // let data = {
-  //   name: 'Kazuma',
-  //   date: new Date('August 25, 2023 00:00:00 GMT+02:00'),
-  //   time: '19:00:00',
-  // };
-  sheet.appendRow([data.name, data.date, data.time]);
+  sheet.appendRow([data.firstName, data.lastName, data.date, data.time, data.seats, data.isTable, data.notes, data.email, data.phone, data.timeStamp]);
 }
 
 function getAvailableSlots() {
