@@ -36,8 +36,8 @@
             <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
           </div>
           <div class="mb-3">
-            <label for="selectNumber" class="form-label">Seats</label>
-            <select id="selectNumber" class="form-select" aria-label="Default select example">
+            <label for="seatNum" class="form-label">Seats</label>
+            <select id="seatNum" class="form-select">
               <option selected>Please select number of seats</option>
               <option value="1">1</option>
               <option value="2">2</option>
@@ -114,7 +114,7 @@
           // hideLoaderScreen();
         }
 
-        function displayTime(stamp) {
+        function formatTime(stamp) {
           let d = new Date(stamp);
           let hr = d.getUTCHours();
           let min = d.getUTCMinutes();
@@ -130,9 +130,10 @@
             $("#lunchSlots").append(`<div>No Slots Available</div>`);
           } else {
             for (i = 0; i < slots.lunch.length; i++) {
-              $("#lunchSlots").append(`<button id="lunchSlot-${i}" type="button" class="btn btn-outline-dark">${displayTime(slots.lunch[i])}</button>`);
+              $("#lunchSlots").append(`<button id="lunchSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.lunch[i])}</button>`);
               $(`#lunchSlot-${i}`).on("click", {'param': slots.lunch[i]}, function(e) {
-                submitReservation(e.data.param);
+                // submitReservation(e.data.param);
+                Link1(e.data.param);
               });
             }
           }
@@ -141,9 +142,10 @@
             $("#dinnerSlots").append(`<div>No Slots Available</div>`);
           } else {
             for (i = 0; i < slots.dinner.length; i++) {
-              $("#dinnerSlots").append(`<button id="dinnerSlot-${i}" type="button" class="btn btn-outline-dark">${displayTime(slots.dinner[i])}</button>`);
+              $("#dinnerSlots").append(`<button id="dinnerSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.dinner[i])}</button>`);
               $(`#dinnerSlot-${i}`).on("click", {'param': slots.dinner[i]}, function(e) {
-                submitReservation(e.data.param);
+                // submitReservation(e.data.param);
+                Link1(e.data.param);
               });
             }
           }
@@ -160,26 +162,22 @@
         return dateString;
       }
 
-      function Link1() {
+      function Link1(data) {
         const date = getDateString($("#datePicker").val());
-        // var lastname = document.getElementById("lastname").value;
-        console.log('date');
-        console.log(date);
+        const time = formatTime(data);
+        const seats = $("#seatNum").val();
+
         var url = document.getElementById("url").value;
         var link = document.createElement('a');
-        link.href = url+"?date="+date/*+"&lastname="+lastname*/+"&page=personalInfo";
-        // link.href = url+"?page=personalInfo";
+        link.href = url+"?date="+date+"&time="+time+"&seats="+seats+"&page=personalInfo";
         link.id = 'linkURL';
         document.body.appendChild(link);
-        console.log('before click');
-        console.log(link.href);
         document.getElementById("linkURL").click();
-
       }
 
       const submitReservation = (data) => {
         console.log(data);
-        let time = displayTime(data);
+        let time = formatTime(data);
         const name = 'Noda';
         const date = getDateString($("#datePicker").val());
         const dataToSend = {
