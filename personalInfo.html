@@ -22,6 +22,7 @@
       <span>DATE: <?= date ?></span><br>
       <span>TIME: <?= time ?></span><br>
       <span>SEATS: <?= seats ?></span><br>
+      <span>isTable: <?= isTable ?></span><br>
 
     </div>
     <form class="form-container row g-3">
@@ -71,6 +72,7 @@
     <input type="hidden" value="<?= date ?>" id="date" />
     <input type="hidden" value="<?= time ?>" id="time" />
     <input type="hidden" value="<?= seats ?>" id="seats" />
+    <input type="hidden" value="<?= isTable ?>" id="isTable" />
     <!-- <input type="button" value="Back to Main Menu" onclick="Back()" /><br> -->
     <!-- <span>DATE: <?= date ?></span><br> -->
     <!-- <?var url = getUrl();?><input type="hidden" value="<?= url ?>" id="url" /> -->
@@ -89,17 +91,17 @@
 
      const submitReservation = () => {
         // const name = 'Noda';
-        const firstName = $("#firstName").val();
-        const lastName = $("#lastName").val();
-        const date = $("#date").val();
-        const time = $("#time").val();
-        const seats = $("#seats").val();
-        const isTable = false;
-        const notes = $("#notes").val();
-        const email = $("#email").val();
-        const phone = $("#phone").val();
-        const timeStamp = Date.now();
-        const dataToSend = {
+        let firstName = $("#firstName").val();
+        let lastName = $("#lastName").val();
+        let date = $("#date").val();
+        let time = $("#time").val();
+        let seats = $("#seats").val();
+        let isTable = $("#isTable").val();
+        let notes = $("#notes").val();
+        let email = $("#email").val();
+        let phone = $("#phone").val();
+        let timeStamp = Date.now();
+        let dataToSend = {
           firstName, lastName, date, time, seats, isTable, notes, email, phone, timeStamp,
         }
         google.script.run.withSuccessHandler(slotBooked)

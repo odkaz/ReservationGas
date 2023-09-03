@@ -46,10 +46,6 @@
               <option value="5">5</option>
               <option value="6">6</option>
               <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
             </select>
           </div>
           <button type="button" onClick="getTimeSlots()" class="btn btn-dark">Search</button>
@@ -104,12 +100,18 @@
           </div>`
         );
         console.log($("#datePicker").val());
-        google.script.run.withSuccessHandler(gotSlots).getAvailableSlots($("#datePicker").val());
+        let dataToSend = {
+          date: $("#datePicker").val(),
+          seats: $("#seatNum").val(),
+        };
+        console.log(dataToSend);
+        google.script.run.withSuccessHandler(gotSlots).getAvailableSlots(dataToSend);
       //       showLoaderScreen();
       }
 
         function gotSlots(result) {
           const slots = JSON.parse(result);
+          console.log(slots);
           setSlots(slots);
           // hideLoaderScreen();
         }
@@ -130,7 +132,7 @@
             $("#lunchSlots").append(`<div>No Slots Available</div>`);
           } else {
             for (i = 0; i < slots.lunch.length; i++) {
-              $("#lunchSlots").append(`<button id="lunchSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.lunch[i])}</button>`);
+              $("#lunchSlots").append(`<button id="lunchSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.lunch[i].time)}</button>`);
               $(`#lunchSlot-${i}`).on("click", {'param': slots.lunch[i]}, function(e) {
                 // submitReservation(e.data.param);
                 Link1(e.data.param);
@@ -142,7 +144,7 @@
             $("#dinnerSlots").append(`<div>No Slots Available</div>`);
           } else {
             for (i = 0; i < slots.dinner.length; i++) {
-              $("#dinnerSlots").append(`<button id="dinnerSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.dinner[i])}</button>`);
+              $("#dinnerSlots").append(`<button id="dinnerSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.dinner[i].time)}</button>`);
               $(`#dinnerSlot-${i}`).on("click", {'param': slots.dinner[i]}, function(e) {
                 // submitReservation(e.data.param);
                 Link1(e.data.param);
@@ -152,24 +154,24 @@
         }
 
       function getDateString(date) {
-        const currentDate = new Date(date);
-        const currentDayOfMonth = currentDate.getDate();
-        const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
-        const currentYear = currentDate.getFullYear();
+        let currentDate = new Date(date);
+        let currentDayOfMonth = currentDate.getDate();
+        let currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
+        let currentYear = currentDate.getFullYear();
 
-        const dateString = (currentMonth + 1) + "/" + currentDayOfMonth + "/" + currentYear;
+        let dateString = (currentMonth + 1) + "/" + currentDayOfMonth + "/" + currentYear;
         // "27-11-2020"
         return dateString;
       }
 
       function Link1(data) {
-        const date = getDateString($("#datePicker").val());
-        const time = formatTime(data);
-        const seats = $("#seatNum").val();
-
-        var url = document.getElementById("url").value;
-        var link = document.createElement('a');
-        link.href = url+"?date="+date+"&time="+time+"&seats="+seats+"&page=personalInfo";
+        let date = getDateString($("#datePicker").val());
+        let time = formatTime(data.time);
+        let seats = $("#seatNum").val();
+        let isTable = data.isTable;
+        let url = document.getElementById("url").value;
+        let link = document.createElement('a');
+        link.href = url+"?date="+date+"&time="+time+"&seats="+seats+"&isTable="+isTable+"&page=personalInfo";
         link.id = 'linkURL';
         document.body.appendChild(link);
         document.getElementById("linkURL").click();
