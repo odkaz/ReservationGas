@@ -14,11 +14,9 @@ function doGet(e) {
     htmlOutput.isTable = e.parameter['isTable'];
     return htmlOutput.evaluate();  
   }
-  else if(e.parameter['page'] == 'Link 2')
+  else if(e.parameter['page'] == 'formSubmitted')
   {
     var htmlOutput =  HtmlService.createTemplateFromFile('formSubmitted');
-    htmlOutput.firstname = e.parameter['firstname'];
-    htmlOutput.lastname = e.parameter['lastname'];
     return htmlOutput.evaluate();  
   } 
   else if(e.parameter['page'] == 'Index')
