@@ -32,14 +32,14 @@
     <script>
 
       function Back()
-      {  
+      {
         var url = document.getElementById("url").value;
         var link = document.createElement('a');
-        link.href = url+"?page=Index&message=Back From Link 2";
+        link.href = url;
         link.id = 'linkURL';
         document.body.appendChild(link);
-        document.getElementById("linkURL").click();  
+        document.getElementById("linkURL").click();
       }
-      </script>  
+      </script>
    </body>
 </html>
