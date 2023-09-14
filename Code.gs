@@ -1,9 +1,12 @@
 function doGet(e) {
-  if (!e.parameter.page) 
+  if (!e.parameter.page)
   {
     var htmlOutput =  HtmlService.createTemplateFromFile('reservationForm');
     htmlOutput.message = '';
-    return htmlOutput.evaluate();
+    return htmlOutput.evaluate()
+        .setSandboxMode(HtmlService.SandboxMode.IFRAME)
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+        .addMetaTag("viewport", "width=device-width, initial-scale=1");
   }
   else if(e.parameter['page'] == 'personalInfo')
   {
@@ -12,19 +15,25 @@ function doGet(e) {
     htmlOutput.time = e.parameter['time'];
     htmlOutput.seats = e.parameter['seats'];
     htmlOutput.isTable = e.parameter['isTable'];
-    return htmlOutput.evaluate();  
+    return htmlOutput.evaluate();
   }
   else if(e.parameter['page'] == 'formSubmitted')
   {
     var htmlOutput =  HtmlService.createTemplateFromFile('formSubmitted');
-    return htmlOutput.evaluate();  
-  } 
+    return htmlOutput.evaluate();
+  }
   else if(e.parameter['page'] == 'Index')
   {
     var htmlOutput =  HtmlService.createTemplateFromFile('reservationForm');
     htmlOutput.message = e.parameter['message'];
-    return htmlOutput.evaluate();  
-  }   
+    return htmlOutput.evaluate();
+  }
+  else if(e.parameter['page'] == 'cancelReservation')
+  {
+    var htmlOutput =  HtmlService.createTemplateFromFile('reservationForm');
+    htmlOutput.id = e.parameter['id'];
+    return htmlOutput.evaluate();
+  }
 }
 
 function getUrl() {
@@ -33,8 +42,9 @@ function getUrl() {
 }
 
 function addReservation(data) {
+  let uuid = Utilities.getUuid();
   let sheet = SpreadsheetApp.getActive().getSheetByName('history');
-  sheet.appendRow([data.firstName, data.lastName, data.date, data.time, data.seats, data.isTable, data.notes, data.email, data.phone, data.timeStamp, false]);
+  sheet.appendRow([data.firstName, data.lastName, data.date, data.time, data.seats, data.isTable, data.notes, data.email, data.phone, data.timeStamp, uuid, false, false]);
 }
 
 function getAvailableSlots(data) {
@@ -74,7 +84,7 @@ function getReserved(date) {
   return res;
 }
 
-const COLUMNS = ["First Name", "Last Name", "Date", "Time", "Seats", "Counter/Table", "Notes", "E-mail", "Phone", "TimeStamp", "Check-in"];
+const COLUMNS = ["First Name", "Last Name", "Date", "Time", "Seats", "Counter/Table", "Notes", "E-mail", "Phone", "TimeStamp", "Uuid", "Check-in", ];
 
 function formatTime(time) {
   let d = new Date(time);
@@ -154,14 +164,3 @@ function getShifts(date, seats) {
   }
   return slots;
 }
-
-Array.prototype.findByDate = function(search){
-  let res = [];
-  if(search == "") return false;
-  for (var i=0; i<this.length; i++) {
-    if (!(this[i] > search) && !(this[i] < search)) {
-      res.push(this[i]);
-    }
-  }
-  return res;
-} 
