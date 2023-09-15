@@ -16,10 +16,14 @@
     </style>
   </head>
   <body>
-    <h3>Your reservation details</h3>
-    <ul id="details" class="list-group list-group-flush mt-2">
+    <div id="containerBefore">
+      <h3>Your reservation details</h3>
+      <ul id="details" class="list-group list-group-flush mt-2"></ul>
+    </div>
+    <div id="containerAfter">
+      Successfully canceled reservation
+    </div>
 
-    </ul>
 
 
 
@@ -29,6 +33,7 @@
     <input type="hidden" value="<?= uuid ?>" id="uuid" />
     <script>
       window.onload = function() {
+        $("#containerAfter").hide();
         getDetails();
       };
       function getDetails() {
@@ -50,7 +55,7 @@
         } else {
           $("#details").append(`<li class="list-group-item">Table seat</li>`);
         }
-        $("body").append(`
+        $("containerBefore").append(`
         <div class="form-check mt-4">
           <input class="form-check-input" type="checkbox" id="check3">
           <label class="form-check-label" for="check3">
@@ -69,6 +74,8 @@
 
       function cancelHandler(result) {
         console.log("cancel successful");
+        $("#containerBefore").hide();
+        $("#containerAfter").show();
       }
     </script>
   </body>
