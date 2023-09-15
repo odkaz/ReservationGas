@@ -1,5 +1,4 @@
-function getDetailByUuid() {
-  let uuid = "e20f80e5-e830-4b83-9654-fa0c08d4bea9";
+function getDetailsByUuid(uuid) {
   let ss = SpreadsheetApp.getActiveSpreadsheet();
   let histSheet = ss.getSheetByName("history");
   let uuidPos = COLUMNS.findIndex((x) => x == "Uuid");
@@ -15,18 +14,18 @@ function getDetailByUuid() {
       let res = {
         first: row[firstPos],
         last: row[lastPos],
-        date: row[datePos],
-        time: row[timePos],
+        date: formatDate(row[datePos]),
+        time: formatTime(row[timePos]),
         seats: row[seatsPos],
-        typePos: row[typePos],
+        type: row[typePos],
       }
       console.log(res);
+      return res;
     }
   }
 }
 
-function cancelByUuid() {
-  let uuid = "90aa1892-f70a-4daa-b011-4c58fdb53a10";
+function cancelByUuid(uuid) {
   let ss = SpreadsheetApp.getActiveSpreadsheet();
   let histSheet = ss.getSheetByName("history");
   let cancelSheet = ss.getSheetByName("cancels");
