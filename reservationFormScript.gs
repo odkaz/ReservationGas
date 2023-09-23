@@ -1,180 +1,134 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <base target="_top">
-    <title>Reservation</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+function getAvailableSlots(data) {
+  // let data = 'September, 01 2023';
+  // let seats = 2;
+  let date = new Date(data.date);
+  let shifts = getShifts(date, data.seats);
+  return JSON.stringify(shifts);
+}
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+function formatDate(date) {
+  let currentDate = new Date(date);
+  let currentDayOfMonth = currentDate.getDate();
+  let currentMonth = currentDate.getMonth();
+  let currentYear = currentDate.getFullYear();
+  let dateString = (currentMonth + 1) + "/" + currentDayOfMonth + "/" + currentYear;
+  return dateString;
+}
 
-    <!-- Flatpickr -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/themes/dark.css">
-  <style>
-    body {
-      padding: 40px;
+function isSameDate(a, b) {
+  return formatDate(a) == formatDate(b);
+}
+
+function getReserved(date) {
+  //search for the reserved slots on a given date
+  const DATE_POS = 2;
+  let search = new Date(date);
+  let sheet = SpreadsheetApp.getActive().getSheetByName('history');
+  if(sheet.getLastRow() == 1) {
+    return [];
+  }
+  let values = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues();
+  let res = [];
+  for (let i = 0; i < values.length; i++) {
+    let cmp = new Date(values[i][DATE_POS]);
+    if (isSameDate(cmp, search)) {
+      res.push(values[i]);
     }
-    .form-container {
+  }
+  return res;
+}
 
+function formatTime(time) {
+  let d = new Date(time);
+  let hr = d.getUTCHours();
+  let min = d.getUTCMinutes();
+  if (min < 10) {
+    min = "0" + min;
+  }
+  return hr + ':' + min;
+}
+
+function isSameTime(a, b) {
+  return formatTime(a) == formatTime(b);
+}
+
+function checkSeat(time, reserved, seats) {
+  const MAX_COUNTER = 7;
+  const MAX_TABLE = 4;
+  const timePos = COLUMNS.findIndex((x) => x == "Time");
+  const seatsPos = COLUMNS.findIndex((x) => x == "Seats");
+  const typePos = COLUMNS.findIndex((x) => x == "Counter/Table");
+  let counter = 0;
+  let table = 0;
+
+  for (let i = 0; i < reserved.length; i++) {
+    if (isSameTime(time, reserved[i][timePos])) {
+      if (reserved[i][typePos]) {
+        // is table
+        table += reserved[i][seatsPos];
+      } else {
+        // is counter
+        counter += reserved[i][seatsPos];
+      }
     }
-    .date-container {
-      border: 2px solid whitesmoke;
-      border-radius: 10px;
-      padding: 40px;
+  }
+  if (MAX_COUNTER - counter >= seats) {
+    return "counter"
+  }
+  if (table == 0 && MAX_TABLE >= seats) {
+    return "table"
+  }
+  return null;
+}
+
+function getDaysOffOption(date) {
+  let shifts = SpreadsheetApp.getActive().getSheetByName('daysOff');
+  let values = shifts.getRange("A2:B").getValues();
+  for (let i = 0; i < values.length; i++) {
+    if (!values[i][0]) {
+      break;
     }
-  </style>
-  </head>
-  <body>
-    <div class="form-container">
-      <form>
-        <div class="date-container">
-          <div class="mb-3">
-            <label for="datePicker" class="form-label">Resevation date</label>
-            <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
-          </div>
-          <div class="mb-3">
-            <label for="seatNum" class="form-label">Seats</label>
-            <select id="seatNum" class="form-select">
-              <option selected>Please select number of seats</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-            </select>
-          </div>
-          <button type="button" onClick="getTimeSlots()" class="btn btn-dark">Search</button>
-        </div>
-        <div id="slotContainer" class="slot-container">
-        </div>
+    if (isSameDate(date, values[i][0])) {
+      if (!values[i][1]) {
+        return "Day off";
+      } else {
+        return values[i][1]; //"Lunch only", "Dinner only"
+      }
+    }
+  }
+  return "Open";
+}
 
-      </form>
-    </div>
-
-    <div>
-      <!-- <span><?= message ?></span> -->
-      <?var url = getUrl();?><input type="hidden" value="<?= url ?>" id="url" />
-    </div>
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
-    <script>
-      $("#datePicker").flatpickr({
-          enableTime: false,
-          dateFormat: "F, d Y",
-          onChange: () => clearSlots()
+function getShifts(date, seats) {
+  const DINNER_ROW = 5;
+  let reserved = getReserved(date);
+  let day = date.getDay();
+  let shifts = SpreadsheetApp.getActive().getSheetByName('shifts');
+  let columnValues = shifts.getRange(2, day + 2, shifts.getLastRow()).getValues();
+  let option = getDaysOffOption(date);
+  let lunch = [];
+  let dinner = [];
+  for (var i=0; i<columnValues.length; i++) {
+    if (!columnValues[i][0]) {
+      continue;
+    }
+    let seatType = checkSeat(columnValues[i][0], reserved, seats);
+    if (!seatType) continue;
+    if (i < DINNER_ROW && (option == "Open" || option == "Lunch only")) {
+      lunch.push({
+        time: columnValues[i][0],
+        isTable: seatType == "table",
       });
-
-      const clearSlots = () => {
-        $("#slotContainer").html(``);
-      }
-
-      function getTimestampFromDate(date) {
-          try {
-              if (!date) return "";
-              const dateArr = date.split("/");
-              const now = new Date(dateArr[2], parseInt(dateArr[0]) - 1, dateArr[1]);
-              return now.getTime();
-          } catch (error) {
-              console.log(error);
-              return "";
-          }
-      }
-
-      const getTimeSlots = () => {
-        $("#slotContainer").html(`
-          <label for="lunchSlots" class="form-label mt-4">Lunch</label>
-          <div id="lunchSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-          </div>
-          <label for="dinnerSlots" class="form-label mt-4">Dinner</label>
-          <div id="dinnerSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-          </div>`
-        );
-        console.log($("#datePicker").val());
-        let dataToSend = {
-          date: $("#datePicker").val(),
-          seats: $("#seatNum").val(),
-        };
-        console.log(dataToSend);
-        google.script.run.withSuccessHandler(gotSlots).getAvailableSlots(dataToSend);
-      //       showLoaderScreen();
-      }
-
-        function gotSlots(result) {
-          const slots = JSON.parse(result);
-          console.log(slots);
-          setSlots(slots);
-          // hideLoaderScreen();
-        }
-
-        function formatTime(stamp) {
-          let d = new Date(stamp);
-          let hr = d.getUTCHours();
-          let min = d.getUTCMinutes();
-          if (min < 10) {
-            min = "0" + min;
-          }
-          return hr + ':' + min;
-        }
-
-        function setSlots(slots) {
-          //lunch slots
-          if (slots.lunch.length == 0) {
-            $("#lunchSlots").append(`<div>No Slots Available</div>`);
-          } else {
-            for (i = 0; i < slots.lunch.length; i++) {
-              $("#lunchSlots").append(`<button id="lunchSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.lunch[i].time)}</button>`);
-              $(`#lunchSlot-${i}`).on("click", {'param': slots.lunch[i]}, function(e) {
-                // submitReservation(e.data.param);
-                Link1(e.data.param);
-              });
-            }
-          }
-          //dinner slots
-          if (slots.dinner.length == 0) {
-            $("#dinnerSlots").append(`<div>No Slots Available</div>`);
-          } else {
-            for (i = 0; i < slots.dinner.length; i++) {
-              $("#dinnerSlots").append(`<button id="dinnerSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.dinner[i].time)}</button>`);
-              $(`#dinnerSlot-${i}`).on("click", {'param': slots.dinner[i]}, function(e) {
-                // submitReservation(e.data.param);
-                Link1(e.data.param);
-              });
-            }
-          }
-        }
-
-      function getDateString(date) {
-        let currentDate = new Date(date);
-        let currentDayOfMonth = currentDate.getDate();
-        let currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
-        let currentYear = currentDate.getFullYear();
-
-        let dateString = (currentMonth + 1) + "/" + currentDayOfMonth + "/" + currentYear;
-        // "27-11-2020"
-        return dateString;
-      }
-
-      function Link1(data) {
-        let date = getDateString($("#datePicker").val());
-        let time = formatTime(data.time);
-        let seats = $("#seatNum").val();
-        let isTable = data.isTable;
-        let url = document.getElementById("url").value;
-        let link = document.createElement('a');
-        link.href = url+"?date="+date+"&time="+time+"&seats="+seats+"&isTable="+isTable+"&page=personalInfo";
-        link.id = 'linkURL';
-        document.body.appendChild(link);
-        document.getElementById("linkURL").click();
-      }
-    </script>
-  </body>
-</html>
+    } else if (i >= DINNER_ROW && (option == "Open" || option == "Dinner only")) {
+      dinner.push({
+        time: columnValues[i][0],
+        isTable: seatType == "table",
+      });
+    }
+  }
+  let slots = {
+    lunch,
+    dinner,
+  }
+  return slots;
+}
