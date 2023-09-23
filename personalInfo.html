@@ -8,15 +8,13 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- intl tel input plugin -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <style>
       body {
         padding: 40px;
-      }
-      .form-container {
-  
-      }
-      .w-100 {
-        width: 100px;
       }
       .table-text {
         width: 100%;
@@ -25,6 +23,12 @@
         background-color: lightgray;
       }
       .submit-btn {
+        width: 100%;
+      }
+      .intl-tel-input {
+        width: 100%;
+      }
+      .iti {
         width: 100%;
       }
     </style>
@@ -67,32 +71,32 @@
         </div>
       </div>
     </div>
-    <!-- <span>DATE: <?= date ?></span><br>
-    <span>TIME: <?= time ?></span><br>
-    <span>SEATS: <?= seats ?></span><br>
-    <span>isTable: <?= isTable ?></span><br> -->
     <div class="table-text mb-5">
       Counter seats are already full for this scheduel. Only table seats are available.
     </div>
-    <form onsubmit="submitReservation(); return false;" class="form-container row g-3">
+    <form onsubmit="return false;" class="needs-validation row g-3" novalidate>
       <div class="col-md-6">
-        <input id="firstName" type="text" class="form-control" placeholder="First name">
+        <input id="firstName" type="text" class="form-control" placeholder="First name" required>
       </div>
       <div class="col-md-6">
-        <input id="lastName" type="text" class="form-control" placeholder="Last name">
+        <input id="lastName" type="text" class="form-control" placeholder="Last name" required>
       </div>
       <div class="col-md-6">
-        <input id="phone" type="tel" class="form-control" placeholder="Phone">
+        <input id="phone" type="tel" class="form-control" placeholder="Phone" style="width:100%; display:block;"required/>
       </div>
       <div class="col-md-6">
-        <input id="email" type="email" class="form-control" placeholder="Email">
+        <input id="email" type="email" class="form-control" placeholder="Email" required>
+        <div class="invalid-feedback">
+          Please type a valid email
+        </div>
       </div>
+
       <div class="col-md-6">
         <input id="notes" type="text" class="form-control" placeholder="Add a special request (optional)">
       </div>
       <div class="col-12">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="check1">
+          <input class="form-check-input" type="checkbox" id="check1" required>
           <label class="form-check-label" for="check1">
             I understand that the seat will be served in the table
           </label>
@@ -100,7 +104,7 @@
       </div>
       <div class="col-12">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="check2">
+          <input class="form-check-input" type="checkbox" id="check2" required>
           <label class="form-check-label" for="check2">
             Please indicate the ages of your children in the request box
           </label>
@@ -108,7 +112,7 @@
       </div>
       <div class="col-12">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="check3">
+          <input class="form-check-input" type="checkbox" id="check3" required>
           <label class="form-check-label" for="check3">
             Please indicate any alergies in the request box
           </label>
@@ -118,6 +122,7 @@
         <button type="submit" class="btn btn-dark submit-btn">Complete reservation</button>
       </div>
     </form>
+    <div class="alert alert-info" style="display: none;"></div>
     <input type="hidden" value="<?= date ?>" id="date" />
     <input type="hidden" value="<?= time ?>" id="time" />
     <input type="hidden" value="<?= seats ?>" id="seats" />
@@ -127,6 +132,36 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (function () {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+              if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+              } else {
+                submitReservation();
+              }
+              form.classList.add('was-validated')
+          }, false)
+        })
+      })()
+      //==========tel phone=========
+      const phoneInputField = document.querySelector("#phone");
+      const phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript:
+          "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+      });
+      const info = document.querySelector(".alert-info");
+      //==========tel phone===========
+
      function toLink() {
         var url = document.getElementById("url").value;
         var link = document.createElement('a');
@@ -137,7 +172,6 @@
       }
 
      const submitReservation = () => {
-        // const name = 'Noda';
         let firstName = $("#firstName").val();
         let lastName = $("#lastName").val();
         let date = $("#date").val();
@@ -146,20 +180,20 @@
         let isTable = $("#isTable").val();
         let notes = $("#notes").val();
         let email = $("#email").val();
-        let phone = $("#phone").val();
+        let phone = phoneInput.getNumber();
         let timeStamp = Date.now();
         let dataToSend = {
           firstName, lastName, date, time, seats, isTable, notes, email, phone, timeStamp,
         }
         google.script.run.withSuccessHandler(slotBooked)
           .addReservation(dataToSend);
-        toLink();
-        console.log(dataToSend);
-        console.log('form submitted');
+        // toLink();
       }
 
       const slotBooked = (error) => {
-        
+        //success page
+
+        //failure page
       }
      </script>  
    </body>
