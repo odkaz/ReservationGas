@@ -162,13 +162,13 @@
       const info = document.querySelector(".alert-info");
       //==========tel phone===========
 
-     function toLink() {
+     function toLink(error) {
         var url = document.getElementById("url").value;
         var link = document.createElement('a');
-        link.href = url+"?page=formSubmitted";
+        link.href = url + "?page=formSubmitted&error=" + error;
         link.id = 'linkURL';
         document.body.appendChild(link);
-        document.getElementById("linkURL").click();        
+        document.getElementById("linkURL").click();
       }
 
      const submitReservation = () => {
@@ -185,15 +185,22 @@
         let dataToSend = {
           firstName, lastName, date, time, seats, isTable, notes, email, phone, timeStamp,
         }
-        google.script.run.withSuccessHandler(slotBooked)
+        console.log(dataToSend);
+        google.script.run
+          .withSuccessHandler(bookSuccess)
+          .withFailureHandler(bookError)
           .addReservation(dataToSend);
-        // toLink();
       }
 
-      const slotBooked = (error) => {
-        //success page
+      const bookSuccess = () => {
+        // console.log("success");
+        toLink(false);
+      }
 
-        //failure page
+      const bookError = (error) => {
+        // console.log("failure");
+        console.log(error);
+        toLink(true);
       }
      </script>  
    </body>
