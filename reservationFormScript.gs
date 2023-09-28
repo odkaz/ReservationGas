@@ -82,7 +82,7 @@ function checkSeat(time, reserved, seats) {
 }
 
 function getDaysOffOption(date) {
-  let shifts = SpreadsheetApp.getActive().getSheetByName('daysOff');
+  let shifts = SpreadsheetApp.getActive().getSheetByName('Operational Schedule');
   let values = shifts.getRange("A2:B").getValues();
   for (let i = 0; i < values.length; i++) {
     if (!values[i][0]) {
@@ -103,7 +103,7 @@ function getShifts(date, seats) {
   const DINNER_ROW = 5;
   let reserved = getReserved(date);
   let day = date.getDay();
-  let shifts = SpreadsheetApp.getActive().getSheetByName('shifts');
+  let shifts = SpreadsheetApp.getActive().getSheetByName('Seating Schedule');
   let columnValues = shifts.getRange(2, day + 2, shifts.getLastRow()).getValues();
   let option = getDaysOffOption(date);
   let lunch = [];
