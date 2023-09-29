@@ -68,6 +68,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
     <script>
       $("#datePicker").flatpickr({
+          minDate: "today",
           enableTime: false,
           dateFormat: "F, d Y",
           onChange: () => clearSlots()
