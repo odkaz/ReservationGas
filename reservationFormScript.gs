@@ -1,11 +1,3 @@
-function getAvailableSlots(data) {
-  // let data = 'September, 01 2023';
-  // let seats = 2;
-  let date = new Date(data.date);
-  let shifts = getShifts(date, data.seats);
-  return JSON.stringify(shifts);
-}
-
 function formatDate(date) {
   let currentDate = new Date(date);
   let currentDayOfMonth = currentDate.getDate();
@@ -99,36 +91,47 @@ function getDaysOffOption(date) {
   return "Open";
 }
 
-function getShifts(date, seats) {
-  const DINNER_ROW = 5;
+function getSlots(date) {
+  let calendarId = '181ce60548b48c0a2c569686ecb4494111587de8b3889ad233094de1f49deeb9@group.calendar.google.com';
+  let cal = CalendarApp.getCalendarById(calendarId);
+  let startTime = date;
+  let endTime = new Date(startTime.getTime());
+  endTime.setDate(startTime.getDate() + 1);
+  let events = cal.getEvents(startTime, endTime);
+
+  return events;
+}
+
+function getAvailableSlots(data) {
+  let date = new Date(data.date);
+  let seats = data.seats;
   let reserved = getReserved(date);
-  let day = date.getDay();
-  let shifts = SpreadsheetApp.getActive().getSheetByName('Seating Schedule');
-  let columnValues = shifts.getRange(2, day + 2, shifts.getLastRow()).getValues();
-  let option = getDaysOffOption(date);
+  let slots = getSlots(date);
+  let dinnerTime = new Date(date.getTime());
+  let now = Date.now();
+  dinnerTime.setHours(16);
   let lunch = [];
   let dinner = [];
-  for (var i=0; i<columnValues.length; i++) {
-    if (!columnValues[i][0]) {
-      continue;
-    }
-    let seatType = checkSeat(columnValues[i][0], reserved, seats);
+  for (let i = 0; i < slots.length; i++) {
+    let startTime = slots[i].getStartTime();
+    if (startTime < now) continue;
+    let seatType = checkSeat(startTime, reserved, seats);
     if (!seatType) continue;
-    if (i < DINNER_ROW && (option == "Open" || option == "Lunch only")) {
+    if (startTime < dinnerTime) {
       lunch.push({
-        time: columnValues[i][0],
+        time: startTime,
         isTable: seatType == "table",
       });
-    } else if (i >= DINNER_ROW && (option == "Open" || option == "Dinner only")) {
+    } else if (startTime >= dinnerTime) {
       dinner.push({
-        time: columnValues[i][0],
+        time: startTime,
         isTable: seatType == "table",
       });
     }
   }
-  let slots = {
+  let availableSlots = {
     lunch,
     dinner,
   }
-  return slots;
+  return JSON.stringify(availableSlots);
 }
