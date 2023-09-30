@@ -9,23 +9,39 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/themes/dark.css">
   </head>
   <body>
     <div class="container">
+      <div class="date-container">
+        <label for="datePicker" class="form-label">Resevation date</label>
+        <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
+      </div>
       <div id="slotsContainer" class="list-group">
 
 
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
     <script>
-
+      $("#datePicker").flatpickr({
+          enableTime: false,
+          dateFormat: "F, d Y",
+          defaultDate: Date.now(),
+          onChange: () => getTimeSlots(),
+      });
       window.onload = function() {
         getTimeSlots();
       };
 
       const getTimeSlots = () => {
-        google.script.run.withSuccessHandler(showSlots).getReservationsByDate();
+        let data = $("#datePicker").val();
+        console.log(data);
+        google.script.run.withSuccessHandler(showSlots).getReservationsByDate(data);
       }
 
       const COLUMNS = ["First Name", "Last Name", "Date", "Time", "Seats", "Counter/Table", "Notes", "E-mail", "Phone", "TimeStamp", "Uuid", "Check-in", "Cancel"];
@@ -37,14 +53,15 @@
         let typePos = COLUMNS.findIndex((x) => x == "Counter/Table");
         let seatsPos = COLUMNS.findIndex((x) => x == "Seats");
         console.log(data);
+        $("#slotsContainer").html(``);
         for (let i = 0; i < data.length; i++) {
-          $("#slotsContainer").append(`<div id="slot-${i}">${data[i].time}</div>`)
+          $("#slotsContainer").append(`<div id="slot-${i}" class="list-group">${data[i].time}</div>`)
           for (let j = 0; j < data[i].info.length; j++) {
             let customer = data[i].info[j];
             let name = customer[firstPos] + ' ' + customer[lastPos];
             let type = customer[typePos] ? 'B' : 'T';
             let seats = customer[seatsPos];
-            $(`#slot-${i}`).append(`<div id="costomer-${i}-${j}">${type} ${seats} ${name}</div>`)
+            $(`#slot-${i}`).append(`<div id="costomer-${i}-${j}" class="list-group-item">${type} ${seats} ${name}</div>`)
           }
         }
       }
