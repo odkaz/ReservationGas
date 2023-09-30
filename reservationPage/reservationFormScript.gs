@@ -40,10 +40,6 @@ function formatTime(time) {
   return hr + ':' + min;
 }
 
-function isSameTime(a, b) {
-  return formatTime(a) == formatTime(b);
-}
-
 function checkSeat(time, reserved, seats) {
   const MAX_COUNTER = 7;
   const MAX_TABLE = 4;
