@@ -9,6 +9,9 @@
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- Bootstrap Font Icon CSS -->
+  <link rel="stylesheet" href=
+  "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
 
   <!-- Flatpickr -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.css">
@@ -24,12 +27,21 @@
     </div>
     <div class="form-check form-switch">
       <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-      <label class="form-check-label" for="flexSwitchCheckDefault">Show cancels</label>
+      <label class="form-check-label" for="flexSwitchCheckDefault">Hide cancels</label>
+    </div>
+    <div class="mt-5 d-flex flex-row align-items-center justify-content-between">
+      <div class="date-container d-flex flex-row align-items-center w-25" style="min-width: 250px;">
+        <i class="bi-calendar m-3" style="font-size:22px;"></i>
+        <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
+      </div>
+      <div>
+        Hello
+      </div>
+
     </div>
 
-
     <div class="mt-5">
-      <h4 class="mb-2 text-center">| 12:00PM |</h4>
+      <h4 class="mb-2 text-center">12:00PM</h4>
       <div class="list-group list-group-flush">
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
@@ -62,7 +74,7 @@
             </div>
           </div>
         </a>
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+        <div id="customerContainer" class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
             <div>
               <small class="mb-0 text-muted">Name</small>
@@ -76,19 +88,18 @@
               <small class="">Bar 2 seats</small>
             </div>
           </div>
-          <div class="detail-container">
-
-          <div class="mt-4 text-muted">Alergy</div>
-          <div>none</div>
-          <div class="mt-4 text-muted">Note</div>
-          <p>I cannot eat spagetti and there are two children who are alergic to salmons</p>
+          <div id="detailContainer" class="detail-container">
+            <div class="mt-4 text-muted">Alergy</div>
+            <div>none</div>
+            <div class="mt-4 text-muted">Note</div>
+            <p>I cannot eat spagetti and there are two children who are alergic to salmons</p>
           </div>
-        </a>
+        </div>
       </div>
     </div>
 
     <div class="mt-5">
-      <h4 class="mb-2 text-center">| 18:00PM |</h4>
+      <h4 class="mb-2 text-center">06:00PM</h4>
       <div class="list-group list-group-flush">
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
@@ -188,6 +199,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
   <script>
+    $(document).ready(function() {
+      $("#datePicker").flatpickr({
+          enableTime: false,
+          dateFormat: "F, d Y",
+          defaultDate: Date.now(),
+      });
+
+      $("#customerContainer").click(function(){
+        $("#detailContainer").slideToggle();
+      });
+    });
+
     let data = [
       {
         time: "12:00",
