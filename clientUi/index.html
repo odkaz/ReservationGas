@@ -16,14 +16,20 @@
   </head>
   <body>
     <div class="container">
-      <div class="date-container">
-        <label for="datePicker" class="form-label">Resevation date</label>
+      <div class="mt-5">
+        <h2>Daily reservations</h2>
+      </div>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+        <label class="form-check-label" for="flexSwitchCheckDefault">Hide cancels</label>
+      </div>
+      <div class="date-container mt-5">
+        <!-- <label for="datePicker" class="form-label">Resevation date</label> -->
         <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
       </div>
-      <div id="slotsContainer" class="list-group">
+      
+      <div id="slotsContainer" class="mt-5"></div>
 
-
-      </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
@@ -46,6 +52,22 @@
 
       const COLUMNS = ["First Name", "Last Name", "Date", "Time", "Seats", "Counter/Table", "Notes", "E-mail", "Phone", "TimeStamp", "Uuid", "Check-in", "Cancel"];
 
+      function formatTime (time) {
+        const hour = time.substring(0, time.indexOf(":"));
+        const min = time.substring(time.indexOf(":") + 1);
+        if (Number(hour) < 10) {
+          return "0" + time + "AM";
+        } else if (Number(hour) < 12) {
+          return time + "AM";
+        } else if(time == "12:00") {
+          return "12:00PM"
+        } else if(Number(hour) < 22) {
+          return "0" + (Number(hour) - 12).toString() + ":" + min + "PM";
+        } else {
+          return (Number(hour) - 12).toString() + ":" + min + "PM";
+        }
+      }
+
       function showSlots(result) {
         const data = JSON.parse(result);
         let firstPos = COLUMNS.findIndex((x) => x == "First Name");
@@ -55,13 +77,52 @@
         console.log(data);
         $("#slotsContainer").html(``);
         for (let i = 0; i < data.length; i++) {
-          $("#slotsContainer").append(`<div id="slot-${i}" class="list-group">${data[i].time}</div>`)
+          // $("#slotsContainer").append(`<div id="slot-${i}" class="list-group">${data[i].time}</div>`)
+          $("#slotsContainer").append(`
+          <div id="slots-${i}">
+            <h4 class="mb-2 mt-5 text-center">${formatTime(data[i].time)}</h4>
+            <div id="slotsGroup-${i}" class="list-group list-group-flush">
+
+            </div>
+          </div>`);
+          if (data[i].info.length == 0) {
+            $(`#slotsGroup-${i}`).append(`
+            <div>
+              No reservation
+            </div>`);
+          }
           for (let j = 0; j < data[i].info.length; j++) {
             let customer = data[i].info[j];
             let name = customer[firstPos] + ' ' + customer[lastPos];
-            let type = customer[typePos] ? 'B' : 'T';
-            let seats = customer[seatsPos];
-            $(`#slot-${i}`).append(`<div id="costomer-${i}-${j}" class="list-group-item">${type} ${seats} ${name}</div>`)
+            let type = customer[typePos] ? 'Bar' : 'Table';
+            let seats = customer[seatsPos] > 1 ? customer[seatsPos] + ' seats' : customer[seatsPos] + ' seat';
+            $(`#slotsGroup-${i}`).append(`
+            <div id="customer-${i}-${j}" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <div>
+                  <small class="mb-0 text-muted">Name</small>
+                </div>
+              </div>
+              <div class="d-flex w-100 justify-content-between">
+                <div>
+                  <p class="mb-0">${name}</p>
+                </div>
+                <div>
+                  <small class="">${type} ${seats}</small>
+                </div>
+              </div>
+              <div id="detail-${i}-${j}" class="detail-container">
+                <div class="mt-4 text-muted">Alergy</div>
+                <div>none</div>
+                <div class="mt-4 text-muted">Note</div>
+                <p>I cannot eat spagetti and there are two children who are alergic to salmons</p>
+              </div>
+            </div>`);
+
+            $(`#detail-${i}-${j}`).hide();
+            $(`#customer-${i}-${j}`).click(function(){
+              $(`#detail-${i}-${j}`).slideToggle();
+            });
           }
         }
       }
