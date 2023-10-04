@@ -13,6 +13,20 @@
     <!-- Flatpickr -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/themes/dark.css">
+    <style>
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%; 
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -23,9 +37,29 @@
         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
         <label class="form-check-label" for="flexSwitchCheckDefault">Hide cancels</label>
       </div>
-      <div class="date-container mt-5">
-        <!-- <label for="datePicker" class="form-label">Resevation date</label> -->
-        <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
+      <div class="mt-5 d-flex flex-row align-items-center justify-content-between">
+        <button id="myBtn" type="button" class="btn btn-light">Create New</button>
+        <div class="date-container d-flex flex-row align-items-center w-25" style="min-width: 250px;">
+          <i class="bi-calendar m-3" style="font-size:22px;"></i>
+          <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
+        </div>
+      </div>
+
+      <div class="modal" id="myModal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Add Reservation</h5>
+              <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-dark">Save changes</button>
+            </div>
+          </div>
+        </div>
       </div>
       
       <div id="slotsContainer" class="mt-5"></div>
@@ -34,15 +68,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
     <script>
-      $("#datePicker").flatpickr({
-          enableTime: false,
-          dateFormat: "F, d Y",
-          defaultDate: Date.now(),
-          onChange: () => getTimeSlots(),
-      });
-      window.onload = function() {
+      $(document).ready(function() {
+        // init flatpickr
+        $("#datePicker").flatpickr({
+            enableTime: false,
+            dateFormat: "F, d Y",
+            defaultDate: Date.now(),
+            onChange: () => getTimeSlots(),
+        });
+
+        // Get the modal
+        let modal = document.getElementById("myModal");
+        let btn = document.getElementById("myBtn");
+        let closeBtn = document.getElementsByClassName("close")[0];
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+        closeBtn.onclick = function() {
+          modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+        //load slot data
         getTimeSlots();
-      };
+      });
 
       const getTimeSlots = () => {
         let data = $("#datePicker").val();
