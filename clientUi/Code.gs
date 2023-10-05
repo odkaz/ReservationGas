@@ -32,8 +32,9 @@ function getReserved(date) {
   return res;
 }
 
-function getReservationsByDate() {
-  let date = new Date('September 30, 2023');
+function getReservationsByDate(data) {
+  // let date = new Date('October, 04 2023');
+  let date = new Date(data);
   let slots = getSlots(date);
   let reserved = getReserved(date);
   let timePos = COLUMNS.findIndex((x) => x == "Time");
@@ -55,5 +56,68 @@ function getReservationsByDate() {
     res.push(d);
   }
   console.log(res);
-  return res;
+  return JSON.stringify(res);
+}
+
+function checkSeat(time, reserved, seats) {
+  const MAX_COUNTER = 7;
+  const MAX_TABLE = 4;
+  const timePos = COLUMNS.findIndex((x) => x == "Time");
+  const seatsPos = COLUMNS.findIndex((x) => x == "Seats");
+  const typePos = COLUMNS.findIndex((x) => x == "Counter/Table");
+  let counter = 0;
+  let table = 0;
+
+  for (let i = 0; i < reserved.length; i++) {
+    if (isSameTime(time, reserved[i][timePos])) {
+      if (reserved[i][typePos]) {
+        // is table
+        table += reserved[i][seatsPos];
+      } else {
+        // is counter
+        counter += reserved[i][seatsPos];
+      }
+    }
+  }
+  if (MAX_COUNTER - counter >= seats) {
+    return "counter"
+  }
+  if (table == 0 && MAX_TABLE >= seats) {
+    return "table"
+  }
+  return null;
+}
+
+function getAvailableSlots(data) {
+  let date = new Date(data.date);
+  let seats = data.seats;
+  let reserved = getReserved(date);
+  let slots = getSlots(date);
+  let dinnerTime = new Date(date.getTime());
+  let now = Date.now();
+  dinnerTime.setHours(16);
+  let lunch = [];
+  let dinner = [];
+  for (let i = 0; i < slots.length; i++) {
+    let startTime = slots[i].getStartTime();
+    if (startTime < now) continue;
+    let seatType = checkSeat(startTime, reserved, seats);
+    if (!seatType) continue;
+    if (startTime < dinnerTime) {
+      lunch.push({
+        time: startTime,
+        isTable: seatType == "table",
+      });
+    } else if (startTime >= dinnerTime) {
+      dinner.push({
+        time: startTime,
+        isTable: seatType == "table",
+      });
+    }
+  }
+  let availableSlots = {
+    lunch,
+    dinner,
+  }
+  return JSON.stringify(availableSlots);
 }

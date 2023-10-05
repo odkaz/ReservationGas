@@ -16,6 +16,10 @@
     <!-- Flatpickr -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/themes/dark.css">
+
+    <!-- intl tel input plugin -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <style>
       .modal {
         display: none; /* Hidden by default */
@@ -28,6 +32,14 @@
         overflow: auto; /* Enable scroll if needed */
         background-color: rgb(0,0,0); /* Fallback color */
         background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      }
+
+      .intl-tel-input {
+        width: 100%;
+      }
+
+      .iti {
+        width: 100%;
       }
     </style>
   </head>
@@ -52,11 +64,59 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Add Reservation</h5>
+            <p class="modal-title h2">Add Reservation</p>
             <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <p>Modal body text goes here.</p>
+            <div class="form-container">
+              <form>
+                <div class="date-container">
+                  <p class="h5">1. Search for seats</p>
+                  <div class="mb-3">
+                    <!-- <label for="reservationDate" class="form-label">Resevation date</label> -->
+                    <input type="text" class="form-control" id="reservationDate" placeholder="Please select Date Time">
+                  </div>
+                  <div class="mb-3">
+                    <!-- <label for="seatNum" class="form-label">Seats</label> -->
+                    <select id="seatNum" class="form-select">
+                      <option selected>Please select number of seats</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                    </select>
+                  </div>
+                  <button type="button" onClick="getTimeSlots()" class="btn btn-dark">Search</button>
+                </div>
+                <p class="h5 mt-5">2. Select time</p>
+                <div id="slotContainer" class="slot-container">
+                </div>
+              </form>
+            </div>
+
+            <p class="h5 mt-5">3. Enter Details</p>
+            <form onsubmit="return false;" class="needs-validation g-3" novalidate>
+              <div class="row mt-3">
+                <div class="col-8">
+                  <input id="firstName" type="text" class="form-control" placeholder="First name" required>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-8">
+                  <input id="phone" type="tel" class="form-control" placeholder="Phone" style="width:100%; display:block;"required/>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col">
+                  <textarea id="notes" class="form-control" placeholder="Notes" rows="8"></textarea>
+                </div>
+              </div>
+            </form>
+
+
           </div>
           <div class="modal-footer">
             <!-- <button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
@@ -232,83 +292,123 @@
           defaultDate: Date.now(),
       });
 
+      $("#reservationDate").flatpickr({
+          minDate: "today",
+          enableTime: false,
+          dateFormat: "F, d Y",
+          // onChange: () => clearSlots()
+      });
+
       $("#customerContainer").click(function(){
         $("#detailContainer").slideToggle();
       });
+
+      // Get the modal
+      var modal = document.getElementById("myModal");
+      var btn = document.getElementById("myBtn");
+      var closeBtn = document.getElementsByClassName("close")[0];
+      btn.onclick = function() {
+        modal.style.display = "block";
+      }
+      closeBtn.onclick = function() {
+        modal.style.display = "none";
+      }
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+      
+              //tel phone
+      const phoneInputField = document.querySelector("#phone");
+      const phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript:
+          "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+      });
+      const info = document.querySelector(".alert-info");
     });
 
 
-    // Get the modal
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("myBtn");
-    var closeBtn = document.getElementsByClassName("close")[0];
-    btn.onclick = function() {
-      modal.style.display = "block";
-    }
-    closeBtn.onclick = function() {
-      modal.style.display = "none";
-    }
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
+
+
+    const clearSlots = () => {
+        $("#slotContainer").html(``);
       }
-    }
 
-    let data = [
-      {
-        time: "12:00",
-        info: 
-        [
-          [
-            "Kazuma",
-            "Noda",
-            "October 1, 2023",
-            "12:00",
-            2,
-            false,
-            "",
-          ],
+      function getTimestampFromDate(date) {
+          try {
+              if (!date) return "";
+              const dateArr = date.split("/");
+              const now = new Date(dateArr[2], parseInt(dateArr[0]) - 1, dateArr[1]);
+              return now.getTime();
+          } catch (error) {
+              console.log(error);
+              return "";
+          }
+      }
 
-        ], 
-      },
-    ]
-  //   $("#datePicker").flatpickr({
-  //       enableTime: false,
-  //       dateFormat: "F, d Y",
-  //       defaultDate: Date.now(),
-  //       onChange: () => getTimeSlots(),
-  //   });
-  //   window.onload = function() {
-  //     getTimeSlots();
-  //   };
+      const getTimeSlots = () => {
+        $("#slotContainer").html(`
+          <label for="lunchSlots" class="form-label mt-4">Lunch</label>
+          <div id="lunchSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          </div>
+          <label for="dinnerSlots" class="form-label mt-4">Dinner</label>
+          <div id="dinnerSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          </div>`
+        );
+        console.log($("#datePicker").val());
+        let dataToSend = {
+          date: $("#datePicker").val(),
+          seats: $("#seatNum").val(),
+        };
+        console.log(dataToSend);
+        google.script.run.withSuccessHandler(gotSlots).getAvailableSlots(dataToSend);
+      //       showLoaderScreen();
+      }
 
-  //   const getTimeSlots = () => {
-  //     let data = $("#datePicker").val();
-  //     console.log(data);
-  //     google.script.run.withSuccessHandler(showSlots).getReservationsByDate(data);
-  //   }
+      function gotSlots(result) {
+        const slots = JSON.parse(result);
+        console.log(slots);
+        setSlots(slots);
+        // hideLoaderScreen();
+      }
 
-  //   const COLUMNS = ["First Name", "Last Name", "Date", "Time", "Seats", "Counter/Table", "Notes", "E-mail", "Phone", "TimeStamp", "Uuid", "Check-in", "Cancel"];
+      function formatTime(stamp) {
+        let d = new Date(stamp);
+        let hr = d.getUTCHours();
+        let min = d.getUTCMinutes();
+        if (min < 10) {
+          min = "0" + min;
+        }
+        return hr + ':' + min;
+      }
 
-  //   function showSlots(result) {
-  //     const data = JSON.parse(result);
-  //     let firstPos = COLUMNS.findIndex((x) => x == "First Name");
-  //     let lastPos = COLUMNS.findIndex((x) => x == "Last Name");
-  //     let typePos = COLUMNS.findIndex((x) => x == "Counter/Table");
-  //     let seatsPos = COLUMNS.findIndex((x) => x == "Seats");
-  //     console.log(data);
-  //     $("#slotsContainer").html(``);
-  //     for (let i = 0; i < data.length; i++) {
-  //       $("#slotsContainer").append(`<div id="slot-${i}" class="list-group">${data[i].time}</div>`)
-  //       for (let j = 0; j < data[i].info.length; j++) {
-  //         let customer = data[i].info[j];
-  //         let name = customer[firstPos] + ' ' + customer[lastPos];
-  //         let type = customer[typePos] ? 'B' : 'T';
-  //         let seats = customer[seatsPos];
-  //         $(`#slot-${i}`).append(`<div id="costomer-${i}-${j}" class="list-group-item">${type} ${seats} ${name}</div>`)
-  //       }
-  //     }
-  //   }
+      function setSlots(slots) {
+        //lunch slots
+        if (slots.lunch.length == 0) {
+          $("#lunchSlots").append(`<div>No Slots Available</div>`);
+        } else {
+          for (i = 0; i < slots.lunch.length; i++) {
+            $("#lunchSlots").append(`<button id="lunchSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.lunch[i].time)}</button>`);
+            $(`#lunchSlot-${i}`).on("click", {'param': slots.lunch[i]}, function(e) {
+              // submitReservation(e.data.param);
+              // Link1(e.data.param);
+            });
+          }
+        }
+        //dinner slots
+        if (slots.dinner.length == 0) {
+          $("#dinnerSlots").append(`<div>No Slots Available</div>`);
+        } else {
+          for (i = 0; i < slots.dinner.length; i++) {
+            $("#dinnerSlots").append(`<button id="dinnerSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.dinner[i].time)}</button>`);
+            $(`#dinnerSlot-${i}`).on("click", {'param': slots.dinner[i]}, function(e) {
+              // submitReservation(e.data.param);
+              // Link1(e.data.param);
+            });
+          }
+        }
+      }
   </script>
   </body>
 </html>
