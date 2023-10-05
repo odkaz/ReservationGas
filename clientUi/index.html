@@ -202,7 +202,6 @@
         console.log(data);
         $("#slotsContainer").html(``);
         for (let i = 0; i < data.length; i++) {
-          // $("#slotsContainer").append(`<div id="slot-${i}" class="list-group">${data[i].time}</div>`)
           $("#slotsContainer").append(`
           <div id="slots-${i}">
             <h4 class="mb-2 mt-5 text-center">${formatTimeLatin(data[i].time)}</h4>
@@ -286,14 +285,12 @@
         };
         console.log(dataToSend);
         google.script.run.withSuccessHandler(gotSlots).getAvailableSlots(dataToSend);
-      //       showLoaderScreen();
       }
 
       function gotSlots(result) {
         const slots = JSON.parse(result);
         console.log(slots);
         setSlots(slots);
-        // hideLoaderScreen();
       }
 
       function formatTime(stamp) {
@@ -324,16 +321,12 @@
           $("#lunchSlots").append(`<div>No Slots Available</div>`);
         } else {
           for (i = 0; i < slots.lunch.length; i++) {
-            // $("#lunchSlots").append(`<button id="lunchSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.lunch[i].time)}</button>`);
-
             $("#lunchSlots").append(`
               <button id="lunchSlot-${i}" type="button" class="time-slot btn btn-outline-dark" data-bs-toggle="button" autocomplete="off">${formatTime(slots.lunch[i].time)}</button>
             `);
             
             $(`#lunchSlot-${i}`).on("click", {'param': slots.lunch[i]}, function(e) {
               updateTime();
-              // submitReservation(e.data.param);
-              // Link1(e.data.param);
             });
           }
         }
@@ -342,15 +335,11 @@
           $("#dinnerSlots").append(`<div>No Slots Available</div>`);
         } else {
           for (i = 0; i < slots.dinner.length; i++) {
-            // $("#dinnerSlots").append(`<button id="dinnerSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.dinner[i].time)}</button>`);
-          
             $("#dinnerSlots").append(`
               <button id="dinnerSlot-${i}" type="button" class="time-slot btn btn-outline-dark" data-bs-toggle="button" autocomplete="off">${formatTime(slots.dinner[i].time)}</button>
             `);
             $(`#dinnerSlot-${i}`).on("click", {'param': slots.dinner[i]}, function(e) {
               updateTime();
-              // submitReservation(e.data.param);
-              // Link1(e.data.param);
             });
           }
         }
