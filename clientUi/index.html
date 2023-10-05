@@ -303,17 +303,17 @@
         return hr + ':' + min;
       }
 
-      function updateTime() {
-        let elements = document.getElementsByClassName("time-slot");
-        let names = '';
-        for(let i = 0; i < elements.length; i++) {
-          if (elements[i].checked) {
-            $("#timeText").text(`${elements[i].value}`);
-          }
-          console.log("val");
-          console.log(elements[i].value);
-        }
-      }
+      // function updateTime() {
+      //   let elements = document.getElementsByClassName("time-slot");
+      //   let names = '';
+      //   for(let i = 0; i < elements.length; i++) {
+      //     if (elements[i].checked) {
+      //       $("#timeText").text(`${elements[i].value}`);
+      //     }
+      //     console.log("val");
+      //     console.log(elements[i].value);
+      //   }
+      // }
 
       function setSlots(slots) {
         //lunch slots
@@ -322,11 +322,13 @@
         } else {
           for (i = 0; i < slots.lunch.length; i++) {
             $("#lunchSlots").append(`
-              <button id="lunchSlot-${i}" type="button" class="time-slot btn btn-outline-dark" data-bs-toggle="button" autocomplete="off">${formatTime(slots.lunch[i].time)}</button>
+              <input type="radio" class="btn-check" name="options-outlined" id="lunchSlot-${i}" autocomplete="off">
+              <label class="btn btn-outline-dark" for="lunchSlot-${i}">${formatTime(slots.lunch[i].time)}</label>
+
             `);
             
             $(`#lunchSlot-${i}`).on("click", {'param': slots.lunch[i]}, function(e) {
-              updateTime();
+              // updateTime();
             });
           }
         }
@@ -336,10 +338,11 @@
         } else {
           for (i = 0; i < slots.dinner.length; i++) {
             $("#dinnerSlots").append(`
-              <button id="dinnerSlot-${i}" type="button" class="time-slot btn btn-outline-dark" data-bs-toggle="button" autocomplete="off">${formatTime(slots.dinner[i].time)}</button>
+              <input type="radio" class="btn-check" name="options-outlined" id="dinnerSlot-${i}" autocomplete="off">
+              <label class="btn btn-outline-dark" for="dinnerSlot-${i}">${formatTime(slots.dinner[i].time)}</label>
             `);
             $(`#dinnerSlot-${i}`).on("click", {'param': slots.dinner[i]}, function(e) {
-              updateTime();
+              // updateTime();
             });
           }
         }
