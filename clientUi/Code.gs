@@ -91,33 +91,19 @@ function checkSeat(time, reserved, seats) {
 function getAvailableSlots(data) {
   let date = new Date(data.date);
   let seats = data.seats;
+
   let reserved = getReserved(date);
   let slots = getSlots(date);
-  let dinnerTime = new Date(date.getTime());
-  let now = Date.now();
-  dinnerTime.setHours(16);
-  let lunch = [];
-  let dinner = [];
+  let res = [];
   for (let i = 0; i < slots.length; i++) {
-    let startTime = slots[i].getStartTime();
-    if (startTime < now) continue;
-    let seatType = checkSeat(startTime, reserved, seats);
+    let time = slots[i].getStartTime();
+    let seatType = checkSeat(time, reserved, seats);
     if (!seatType) continue;
-    if (startTime < dinnerTime) {
-      lunch.push({
-        time: startTime,
-        isTable: seatType == "table",
-      });
-    } else if (startTime >= dinnerTime) {
-      dinner.push({
-        time: startTime,
-        isTable: seatType == "table",
-      });
-    }
+    res.push({
+      time,
+      isTable: seatType == "table",
+    });
   }
-  let availableSlots = {
-    lunch,
-    dinner,
-  }
-  return JSON.stringify(availableSlots);
+  console.log(res);
+  return JSON.stringify(res);
 }

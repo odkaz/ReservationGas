@@ -73,7 +73,7 @@
                   <div class="date-container">
                     <p class="h5">1. Search for Seats</p>
                     <input type="text" class="form-control mt-3" id="reservationDate" placeholder="Please select Date Time">
-                    <select id="seatNum" class="form-select mt-3">
+                    <select id="seatNum" onchange="clearSlots()" class="form-select mt-3">
                       <option selected>Please select number of seats</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
@@ -270,14 +270,6 @@
       }
 
       const getOpenSlots = () => {
-        $("#slotContainer").html(`
-          <label for="lunchSlots" class="text-muted form-label mt-4">Lunch</label>
-          <div id="lunchSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-          </div>
-          <label for="dinnerSlots" class="text-muted form-label mt-4">Dinner</label>
-          <div id="dinnerSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-          </div>`
-        );
         console.log($("#reservationDate").val());
         let dataToSend = {
           date: $("#reservationDate").val(),
@@ -303,45 +295,18 @@
         return hr + ':' + min;
       }
 
-      // function updateTime() {
-      //   let elements = document.getElementsByClassName("time-slot");
-      //   let names = '';
-      //   for(let i = 0; i < elements.length; i++) {
-      //     if (elements[i].checked) {
-      //       $("#timeText").text(`${elements[i].value}`);
-      //     }
-      //     console.log("val");
-      //     console.log(elements[i].value);
-      //   }
-      // }
-
       function setSlots(slots) {
-        //lunch slots
-        if (slots.lunch.length == 0) {
-          $("#lunchSlots").append(`<div>No Slots Available</div>`);
+        clearSlots();
+        if (slots.length == 0) {
+          $("#slotContainer").append(`<div>No Slots Available</div>`);
         } else {
-          for (i = 0; i < slots.lunch.length; i++) {
-            $("#lunchSlots").append(`
-              <input type="radio" class="btn-check" name="options-outlined" id="lunchSlot-${i}" autocomplete="off">
-              <label class="btn btn-outline-dark" for="lunchSlot-${i}">${formatTime(slots.lunch[i].time)}</label>
-
+          for (i = 0; i < slots.length; i++) {
+            $("#slotContainer").append(`
+              <input type="radio" class="btn-check" name="options-outlined" id="openSlot-${i}" autocomplete="off">
+              <label class="btn btn-outline-dark" for="openSlot-${i}">${formatTime(slots[i].time)}</label>
             `);
             
-            $(`#lunchSlot-${i}`).on("click", {'param': slots.lunch[i]}, function(e) {
-              // updateTime();
-            });
-          }
-        }
-        //dinner slots
-        if (slots.dinner.length == 0) {
-          $("#dinnerSlots").append(`<div>No Slots Available</div>`);
-        } else {
-          for (i = 0; i < slots.dinner.length; i++) {
-            $("#dinnerSlots").append(`
-              <input type="radio" class="btn-check" name="options-outlined" id="dinnerSlot-${i}" autocomplete="off">
-              <label class="btn btn-outline-dark" for="dinnerSlot-${i}">${formatTime(slots.dinner[i].time)}</label>
-            `);
-            $(`#dinnerSlot-${i}`).on("click", {'param': slots.dinner[i]}, function(e) {
+            $(`#openSlot-${i}`).on("click", {'param': slots[i]}, function(e) {
               // updateTime();
             });
           }
