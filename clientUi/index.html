@@ -262,6 +262,8 @@
 //============================For Modal==========================//
       const clearSlots = () => {
           $("#slotContainer").html(``);
+          $("#timeSelected").val("");
+          $("#typeSelected").val("");
         }
 
       function getTimestampFromDate(date) {
@@ -314,6 +316,12 @@
             `);
 
             $(`#openSlot-${i}`).on("click", {'param': slots[i]}, function(e) {
+              let type = e.data.param.isTable ? "Table" : "Bar";
+              if ($("#typeSelected").val() == "") {
+                $("#slotContainer").append(`<div id="tableType" class="mt-2">Seat type: ${type}</div>`);
+              } else {
+                $("#tableType").text(`Seat type: ${type}`);
+              }
               $("#timeSelected").val(formatTime(e.data.param.time));
               $("#typeSelected").val(e.data.param.isTable);
             });
