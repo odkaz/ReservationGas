@@ -247,9 +247,14 @@
                 <div>none</div>
                 <div class="mt-4 text-muted">Note</div>
                 <p>${notes}</p>
+                <button id="cancelBtn-${i}-${j}" class="btn btn-outline-dark">Cancel</button>
               </div>
             </div>`);
-
+            //disable closing toggle
+            $(`#cancelBtn-${i}-${j}`).click(function(e) {
+                e.stopPropagation();
+                console.log("cancel");
+            });
             $(`#detail-${i}-${j}`).hide();
             $(`#customer-${i}-${j}`).click(function(){
               $(`#detail-${i}-${j}`).slideToggle();

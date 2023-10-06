@@ -187,6 +187,8 @@
             <div>none</div>
             <div class="mt-4 text-muted">Note</div>
             <p>I cannot eat spagetti and there are two children who are alergic to salmons</p>
+
+            <button id="cancelBtn" class="btn btn-outline-dark">Cancel</button>
           </div>
         </div>
       </div>
@@ -289,7 +291,7 @@
     </div>
 
   </div>
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
   <script>
@@ -305,6 +307,15 @@
           enableTime: false,
           dateFormat: "F, d Y",
           // onChange: () => clearSlots()
+      });
+
+
+      $("#cancelBtn").click(function(e) {
+          // stop event from bubbling up to row element
+          e.stopPropagation();
+
+          // now do your stuff
+          console.log("cancel");
       });
 
       $("#customerContainer").click(function(){
@@ -327,7 +338,7 @@
         }
       }
       
-              //tel phone
+      //tel phone
       const phoneInputField = document.querySelector("#phone");
       const phoneInput = window.intlTelInput(phoneInputField, {
         utilsScript:
