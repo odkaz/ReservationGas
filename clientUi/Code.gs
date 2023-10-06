@@ -1,5 +1,5 @@
 function doGet(e) {
-  return HtmlService.createHtmlOutputFromFile('index.html');  
+  return HtmlService.createHtmlOutputFromFile('index.html');
 }
 
 function getSlots(date) {
@@ -91,7 +91,6 @@ function checkSeat(time, reserved, seats) {
 function getAvailableSlots(data) {
   let date = new Date(data.date);
   let seats = data.seats;
-
   let reserved = getReserved(date);
   let slots = getSlots(date);
   let res = [];
@@ -106,4 +105,39 @@ function getAvailableSlots(data) {
   }
   console.log(res);
   return JSON.stringify(res);
+}
+
+function updateFilterView() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var dataSheet = ss.getSheetByName('history');
+  let filter = dataSheet.getFilter();
+  if (filter) {
+    filter.remove();
+  }
+  dataSheet.getRange('A1:M').createFilter();
+}
+
+function checkReservation(date, time, seats, isTable) {
+  // let d = new Date(date);
+  let shifts = JSON.parse(getAvailableSlots({date, seats}));
+  for (let i = 0; i < shifts.length; i++) {
+    if (time == formatTime(shifts[i].time)
+      &&isTable == shifts[i].isTable) {
+        return true;
+    }
+  }
+  return false;
+}
+
+function addAdminReservation(data) {
+  let uuid = Utilities.getUuid();
+  let timeStamp = Date.now();
+  let sheet = SpreadsheetApp.getActive().getSheetByName('history');
+
+  if (checkReservation(data.date, data.time, Number(data.seats), data.isTable == "true")) {
+    sheet.appendRow([data.firstName, "(Added by Admin)", data.date, data.time, data.seats, data.isTable, data.notes, "admin@example.com", data.phone, timeStamp, uuid]);
+    updateFilterView();
+  } else {
+    throw new Error( "The slot is no longer available");
+  }
 }
