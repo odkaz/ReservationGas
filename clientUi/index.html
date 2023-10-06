@@ -204,6 +204,7 @@
         let lastPos = COLUMNS.findIndex((x) => x == "Last Name");
         let typePos = COLUMNS.findIndex((x) => x == "Counter/Table");
         let seatsPos = COLUMNS.findIndex((x) => x == "Seats");
+        let notesPos = COLUMNS.findIndex((x) => x == "Notes");
         console.log(data);
         $("#slotsContainer").html(``);
         for (let i = 0; i < data.length; i++) {
@@ -225,6 +226,7 @@
             let name = customer[firstPos] + ' ' + customer[lastPos];
             let type = customer[typePos] ? 'Table' : 'Bar';
             let seats = customer[seatsPos] > 1 ? customer[seatsPos] + ' seats' : customer[seatsPos] + ' seat';
+            let notes = customer[notesPos];
             $(`#slotsGroup-${i}`).append(`
             <div id="customer-${i}-${j}" class="list-group-item list-group-item-action flex-column align-items-start">
               <div class="d-flex w-100 justify-content-between">
@@ -244,7 +246,7 @@
                 <div class="mt-4 text-muted">Alergy</div>
                 <div>none</div>
                 <div class="mt-4 text-muted">Note</div>
-                <p>I cannot eat spagetti and there are two children who are alergic to salmons</p>
+                <p>${notes}</p>
               </div>
             </div>`);
 
