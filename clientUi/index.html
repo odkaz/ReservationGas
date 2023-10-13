@@ -45,13 +45,13 @@
   </head>
   <body>
     <div class="container">
-      <div class="mt-5">
+      <!-- <div class="mt-5">
         <h2>Daily reservations</h2>
       </div>
       <div class="form-check form-switch">
         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
         <label class="form-check-label" for="flexSwitchCheckDefault">Hide cancels</label>
-      </div>
+      </div> -->
       <div class="mt-5 d-flex flex-row align-items-center justify-content-between">
         <button id="myBtn" type="button" class="btn btn-light">Create New</button>
         <div class="date-container d-flex flex-row align-items-center w-25" style="min-width: 250px;">
@@ -203,14 +203,17 @@
         let firstPos = COLUMNS.findIndex((x) => x == "First Name");
         let lastPos = COLUMNS.findIndex((x) => x == "Last Name");
         let typePos = COLUMNS.findIndex((x) => x == "Counter/Table");
+        let phonePos = COLUMNS.findIndex((x) => x == "Phone");
         let seatsPos = COLUMNS.findIndex((x) => x == "Seats");
         let notesPos = COLUMNS.findIndex((x) => x == "Notes");
+        let uuidPos = COLUMNS.findIndex((x) => x == "Uuid");
+        let cancelPos = COLUMNS.findIndex((x) => x == "Cancel");
         console.log(data);
         $("#slotsContainer").html(``);
         for (let i = 0; i < data.length; i++) {
           $("#slotsContainer").append(`
           <div id="slots-${i}">
-            <h4 class="mb-2 mt-5 text-center">${formatTimeLatin(data[i].time)}</h4>
+            <h5 class="mb-2 mt-5">${formatTimeLatin(data[i].time)}</h5>
             <div id="slotsGroup-${i}" class="list-group list-group-flush">
 
             </div>
@@ -223,37 +226,43 @@
           }
           for (let j = 0; j < data[i].info.length; j++) {
             let customer = data[i].info[j];
-            let name = customer[firstPos] + ' ' + customer[lastPos];
-            let type = customer[typePos] ? 'Table' : 'Bar';
-            let seats = customer[seatsPos] > 1 ? customer[seatsPos] + ' seats' : customer[seatsPos] + ' seat';
-            let notes = customer[notesPos];
+            let first = customer[firstPos];
+            let type = customer[typePos] ? 'T' : 'B';
+            let phone = customer[phonePos];
+            let seats = customer[seatsPos];
+            let notes = customer[notesPos]? customer[notesPos] : '-';
+            let uuid = customer[uuidPos];
+            let cancel = customer[cancelPos];
+            console.log('cancel:' + cancel);
             $(`#slotsGroup-${i}`).append(`
-            <div id="customer-${i}-${j}" class="list-group-item list-group-item-action flex-column align-items-start">
-              <div class="d-flex w-100 justify-content-between">
-                <div>
-                  <small class="mb-0 text-muted">Name</small>
+            <div id="customer-${i}-${j}" class="list-group-item list-group-item-action flex-column align-items-start py-4 px-0">
+              <div id="summary-${i}-${j}" class="d-flex flex-row align-items-center justify-content-between">
+                <div id="nameContainer-${i}-${j}">
+                  <span class="p-2 h3 border">${type}${seats}</span>
+                  <span class="ms-1 h3">${first}</span>
                 </div>
               </div>
-              <div class="d-flex w-100 justify-content-between">
-                <div>
-                  <p class="mb-0">${name}</p>
-                </div>
-                <div>
-                  <small class="">${type} ${seats}</small>
-                </div>
-              </div>
+
               <div id="detail-${i}-${j}" class="detail-container">
-                <div class="mt-4 text-muted">Alergy</div>
-                <div>none</div>
+                <div class="mt-4 text-muted">Phone</div>
+                <p>${phone}</p>
                 <div class="mt-4 text-muted">Note</div>
                 <p>${notes}</p>
                 <button id="cancelBtn-${i}-${j}" class="btn btn-outline-dark">Cancel</button>
               </div>
             </div>`);
+            if (customer[notesPos] != "") {
+              //add notification
+              $(`#summary-${i}-${j}`).append(`<i class="bi-chat-right-dots" style="font-size:22px;"></i>`);
+            }
+            if (cancel) {
+              $(`#nameContainer-${i}-${j}`).append(`<span class="text-danger ms-1">Canceled</span>`);
+            }
             //disable closing toggle
             $(`#cancelBtn-${i}-${j}`).click(function(e) {
                 e.stopPropagation();
                 console.log("cancel");
+                onCancel(uuid);
             });
             $(`#detail-${i}-${j}`).hide();
             $(`#customer-${i}-${j}`).click(function(){
@@ -338,11 +347,18 @@
         console.log("success");
         let modal = document.getElementById("myModal");
         modal.style.display = "none";
+        //reload slots
+        getTimeSlots();
       }
 
       function submitFailure() {
         console.log("failure");
         //show a modal with failure
+      }
+
+      const onCancel = (uuid) => {
+        console.log('cancel request: ', uuid);
+        google.script.run.withSuccessHandler(submitSuccess()).cancelByUuid(uuid);
       }
 
       const submitReservation = () => {
