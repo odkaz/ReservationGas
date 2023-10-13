@@ -13,9 +13,10 @@ function getSlots(date) {
   return events;
 }
 
-function getReserved(date) {
+function getReserved(date, includeCancels) {
   //search for the reserved slots on a given date
-  const DATE_POS = 2;
+  let datePos = COLUMNS.findIndex((x) => x == "Date");
+  let cancelPos = COLUMNS.findIndex((x) => x == "Cancel");
   let search = new Date(date);
   let sheet = SpreadsheetApp.getActive().getSheetByName('history');
   if(sheet.getLastRow() == 1) {
@@ -24,7 +25,10 @@ function getReserved(date) {
   let values = sheet.getRange('A2:M').getValues();
   let res = [];
   for (let i = 0; i < values.length; i++) {
-    let cmp = new Date(values[i][DATE_POS]);
+    if (!includeCancels && values[i][cancelPos]) {
+      continue;
+    }
+    let cmp = new Date(values[i][datePos]);
     if (isSameDate(cmp, search)) {
       res.push(values[i]);
     }
@@ -36,7 +40,7 @@ function getReservationsByDate(data) {
   // let date = new Date('October, 04 2023');
   let date = new Date(data);
   let slots = getSlots(date);
-  let reserved = getReserved(date);
+  let reserved = getReserved(date, true);
   let timePos = COLUMNS.findIndex((x) => x == "Time");
   let res = [];
 
@@ -91,7 +95,7 @@ function checkSeat(time, reserved, seats) {
 function getAvailableSlots(data) {
   let date = new Date(data.date);
   let seats = data.seats;
-  let reserved = getReserved(date);
+  let reserved = getReserved(date, false);
   let slots = getSlots(date);
   let res = [];
   for (let i = 0; i < slots.length; i++) {

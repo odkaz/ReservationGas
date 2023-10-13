@@ -51,7 +51,8 @@
           <i id="searchIcon" class="bi-search m-3" style="font-size:20px;"></i>
           <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
         </div>
-        <i id="myBtn" class="bi-plus ms-2" style="font-size:30px;"></i>
+        <i id="addBtn" class="bi-plus ms-2" style="font-size:30px;"></i>
+        <i id="refreshBtn" class="bi-arrow-clockwise ms-2" style="font-size:20px;"></i>
       </div>
 
       <div class="modal" id="myModal" tabindex="-1">
@@ -143,7 +144,7 @@
 
         // Get the modal
         let modal = document.getElementById("myModal");
-        let btn = document.getElementById("myBtn");
+        let btn = document.getElementById("addBtn");
         let closeBtn = document.getElementsByClassName("close")[0];
         btn.onclick = function() {
           modal.style.display = "block";
@@ -156,8 +157,13 @@
             modal.style.display = "none";
           }
         }
-        $("#submitBtn").on( "click", function() {
+        $("#submitBtn").on("click", function() {
           submitReservation();
+        });
+
+        $("#refreshBtn").on("click", function() {
+          $("#slotsContainer").html(``);
+          getTimeSlots();
         });
 
         //load slot data
@@ -172,10 +178,21 @@
       });
       const info = document.querySelector(".alert-info");
 
+      function getReservationSuccess(result) {
+        console.log("get reservation success");
+        showSlots(result);
+      }
+
+      function getReservationFailure() {
+        console.log("get reservation failure");
+        //show a modal with failure
+      }
+
       const getTimeSlots = () => {
         let data = $("#datePicker").val();
-        console.log(data);
-        google.script.run.withSuccessHandler(showSlots).getReservationsByDate(data);
+        google.script.run.withSuccessHandler(getReservationSuccess)
+        .withFailureHandler(getReservationFailure)
+        .getReservationsByDate(data);
       }
 
       const COLUMNS = ["First Name", "Last Name", "Date", "Time", "Seats", "Counter/Table", "Notes", "E-mail", "Phone", "TimeStamp", "Uuid", "Check-in", "Cancel"];
@@ -198,6 +215,7 @@
 
       function showSlots(result) {
         const data = JSON.parse(result);
+        console.log(data);
         let firstPos = COLUMNS.findIndex((x) => x == "First Name");
         let lastPos = COLUMNS.findIndex((x) => x == "Last Name");
         let typePos = COLUMNS.findIndex((x) => x == "Counter/Table");
@@ -206,7 +224,6 @@
         let notesPos = COLUMNS.findIndex((x) => x == "Notes");
         let uuidPos = COLUMNS.findIndex((x) => x == "Uuid");
         let cancelPos = COLUMNS.findIndex((x) => x == "Cancel");
-        console.log(data);
         $("#slotsContainer").html(``);
         for (let i = 0; i < data.length; i++) {
           $("#slotsContainer").append(`
@@ -231,7 +248,6 @@
             let notes = customer[notesPos]? customer[notesPos] : '-';
             let uuid = customer[uuidPos];
             let cancel = customer[cancelPos];
-            console.log('cancel:' + cancel);
             $(`#slotsGroup-${i}`).append(`
             <div id="customer-${i}-${j}" class="list-group-item list-group-item-action flex-column align-items-start py-4 px-0">
               <div id="summary-${i}-${j}" class="d-flex flex-row align-items-center justify-content-between">
@@ -259,7 +275,6 @@
             //disable closing toggle
             $(`#cancelBtn-${i}-${j}`).click(function(e) {
                 e.stopPropagation();
-                console.log("cancel");
                 onCancel(uuid);
             });
             $(`#detail-${i}-${j}`).hide();
@@ -285,24 +300,20 @@
               const now = new Date(dateArr[2], parseInt(dateArr[0]) - 1, dateArr[1]);
               return now.getTime();
           } catch (error) {
-              console.log(error);
               return "";
           }
       }
 
       const getOpenSlots = () => {
-        console.log($("#reservationDate").val());
         let dataToSend = {
           date: $("#reservationDate").val(),
           seats: $("#seatNum").val(),
         };
-        console.log(dataToSend);
         google.script.run.withSuccessHandler(gotSlots).getAvailableSlots(dataToSend);
       }
 
       function gotSlots(result) {
         const slots = JSON.parse(result);
-        console.log(slots);
         setSlots(slots);
       }
 
@@ -342,20 +353,18 @@
       }
 
       function submitSuccess() {
-        console.log("success");
         let modal = document.getElementById("myModal");
         modal.style.display = "none";
         //reload slots
+        $("#slotsContainer").html(``);
         getTimeSlots();
       }
 
       function submitFailure() {
-        console.log("failure");
         //show a modal with failure
       }
 
       const onCancel = (uuid) => {
-        console.log('cancel request: ', uuid);
         google.script.run.withSuccessHandler(submitSuccess()).cancelByUuid(uuid);
       }
 
@@ -370,7 +379,6 @@
         let dataToSend = {
           firstName, date, time, seats, isTable, notes, phone,
         }
-        console.log(dataToSend);
         google.script.run.withSuccessHandler(submitSuccess()).addAdminReservation(dataToSend);
       }
     </script>
