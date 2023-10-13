@@ -45,17 +45,10 @@
   </head>
   <body>
     <div class="container">
-      <!-- <div class="mt-5">
-        <h2>Daily reservations</h2>
-      </div>
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-        <label class="form-check-label" for="flexSwitchCheckDefault">Hide cancels</label>
-      </div> -->
       <div class="mt-5 d-flex flex-row align-items-center justify-content-between">
         <button id="myBtn" type="button" class="btn btn-light">Create New</button>
-        <div class="date-container d-flex flex-row align-items-center w-25" style="min-width: 250px;">
-          <i class="bi-calendar m-3" style="font-size:22px;"></i>
+        <div class="date-container d-flex flex-row align-items-center">
+          <i id="searchIcon" class="bi-search m-3" style="font-size:22px;"></i>
           <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
         </div>
       </div>
@@ -129,11 +122,15 @@
     <script>
       $(document).ready(function() {
         // init flatpickr
-        $("#datePicker").flatpickr({
+        let pickerElement = $("#datePicker").flatpickr({
             enableTime: false,
             dateFormat: "F, d Y",
             defaultDate: Date.now(),
             onChange: () => getTimeSlots(),
+        });
+
+        $("#searchIcon").click(function () {
+          pickerElement.open();
         });
 
         $("#reservationDate").flatpickr({
