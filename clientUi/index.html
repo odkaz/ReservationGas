@@ -44,16 +44,19 @@
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="mt-5 d-flex flex-row align-items-center justify-content-end">
+    <div class="header">
+      <div class="p-2 d-flex flex-row align-items-center justify-content-end bg-dark">
         <!-- <button id="myBtn" type="button" class="btn btn-light">Create New</button> -->
         <div class="date-container d-flex flex-row align-items-center">
-          <i id="searchIcon" class="bi-search m-3" style="font-size:20px;"></i>
+          <i id="searchIcon" class="bi-search m-3" style="font-size:20px;color:white;"></i>
           <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
         </div>
-        <i id="addBtn" class="bi-plus ms-2" style="font-size:30px;"></i>
-        <i id="refreshBtn" class="bi-arrow-clockwise ms-2" style="font-size:20px;"></i>
+        <i id="addBtn" class="bi-plus ms-2 text-white" style="font-size:30px;"></i>
+        <i id="refreshBtn" class="bi-arrow-clockwise ms-2 me-2 text-white" style="font-size:20px;"></i>
       </div>
+    </div>
+    <div class="container">
+
 
       <div class="modal" id="myModal" tabindex="-1">
         <div class="modal-dialog">
