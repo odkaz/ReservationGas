@@ -67,11 +67,11 @@
         </div>
         <div>
           <p class="small text-muted mb-1">Seats</p>
-          <p class="mb-0"><?= seats ?> People (counter seat)</p>
+          <p id="seatInfo" class="mb-0"><?= seats ?> People (counter seat)</p>
         </div>
       </div>
     </div>
-    <div class="table-text mb-5">
+    <div id="onlyTable" class="table-text mb-5">
       Counter seats are already full for this scheduel. Only table seats are available.
     </div>
     <form onsubmit="return false;" class="needs-validation row g-3" novalidate>
@@ -94,7 +94,7 @@
       <div class="col-md-6">
         <input id="notes" type="text" class="form-control" placeholder="Add a special request (optional)">
       </div>
-      <div class="col-12">
+      <div id="checkTable" class="col-12">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="check1" required>
           <label class="form-check-label" for="check1">
@@ -132,15 +132,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-      // Example starter JavaScript for disabling form submissions if there are invalid fields
-      (function () {
-      'use strict'
+      $(document).ready(function() {
+        'use strict'
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
 
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      var forms = document.querySelectorAll('.needs-validation')
-
-      // Loop over them and prevent submission
-      Array.prototype.slice.call(forms)
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
         .forEach(function (form) {
           form.addEventListener('submit', function (event) {
               if (!form.checkValidity()) {
@@ -152,7 +150,43 @@
               form.classList.add('was-validated')
           }, false)
         })
-      })()
+
+        let seats = $("#seats").val();
+        let seatsTxt = seats == 1 ? seats + ' Person' : seats + ' People'
+        let isTable = $("#isTable").val() == 'true';
+        let type = isTable ? 'table' : 'counter';
+        let info = seatsTxt + ' (' + type + ' seat)';
+        $("#seatInfo").text(info);
+        if (!isTable) {
+          $("#onlyTable").hide();
+          $("#checkTable").hide();
+        }
+
+      })
+
+
+
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      // (function () {
+      // 'use strict'
+
+      // // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      // var forms = document.querySelectorAll('.needs-validation')
+
+      // // Loop over them and prevent submission
+      // Array.prototype.slice.call(forms)
+      //   .forEach(function (form) {
+      //     form.addEventListener('submit', function (event) {
+      //         if (!form.checkValidity()) {
+      //           event.preventDefault()
+      //           event.stopPropagation()
+      //         } else {
+      //           submitReservation();
+      //         }
+      //         form.classList.add('was-validated')
+      //     }, false)
+      //   })
+      // })()
       //==========tel phone=========
       const phoneInputField = document.querySelector("#phone");
       const phoneInput = window.intlTelInput(phoneInputField, {
