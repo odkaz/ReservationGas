@@ -13,16 +13,20 @@ function isSameDate(a, b) {
 
 function getReserved(date) {
   //search for the reserved slots on a given date
-  const DATE_POS = 2;
+  let datePos = COLUMNS.findIndex((x) => x == "Date");
+  let cancelPos = COLUMNS.findIndex((x) => x == "Cancel");
   let search = new Date(date);
   let sheet = SpreadsheetApp.getActive().getSheetByName('history');
   if(sheet.getLastRow() == 1) {
     return [];
   }
-  let values = sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).getValues();
+  let values = sheet.getRange('A2:M').getValues();
   let res = [];
   for (let i = 0; i < values.length; i++) {
-    let cmp = new Date(values[i][DATE_POS]);
+    if (values[i][cancelPos]) {
+      continue;
+    }
+    let cmp = new Date(values[i][datePos]);
     if (isSameDate(cmp, search)) {
       res.push(values[i]);
     }
@@ -38,6 +42,10 @@ function formatTime(time) {
     min = "0" + min;
   }
   return hr + ':' + min;
+}
+
+function isSameTime(a, b) {
+  return formatTime(a) == formatTime(b);
 }
 
 function checkSeat(time, reserved, seats) {
@@ -88,17 +96,20 @@ function getDaysOffOption(date) {
 }
 
 function getSlots(date) {
+  // let date = new Date("10/15/2023");
   let calendarId = '181ce60548b48c0a2c569686ecb4494111587de8b3889ad233094de1f49deeb9@group.calendar.google.com';
   let cal = CalendarApp.getCalendarById(calendarId);
   let startTime = date;
   let endTime = new Date(startTime.getTime());
   endTime.setDate(startTime.getDate() + 1);
+  console.log(startTime);
+  console.log(endTime);
   let events = cal.getEvents(startTime, endTime);
-
   return events;
 }
 
 function getAvailableSlots(data) {
+  // let date = new Date("10/15/2023");
   let date = new Date(data.date);
   let seats = data.seats;
   let reserved = getReserved(date);

@@ -16,10 +16,9 @@ function addReservation(data) {
   // sendMail(data.email, msg);
 }
 
-
 function checkReservation(date, time, seats, isTable) {
-  let d = new Date(date);
-  let shifts = getShifts(d, seats);
+  let shifts = JSON.parse(getAvailableSlots({date, seats}));
+  console.log(shifts);
   for (let i = 0; i < shifts.lunch.length; i++) {
     if (time == formatTime(shifts.lunch[i].time)
       &&isTable == shifts.lunch[i].isTable) {
@@ -45,9 +44,8 @@ function updateFilterView() {
   dataSheet.getRange('A1:M').createFilter();
 }
 
-
 function getMessage(date, time, url) {
-    let message = 
+    let message =
       `Thank you for making a reservation with Itosugi. Your reservation is as follows.\n\nDate: ${date}\nTime: ${time}\n\nIf you wish to cancel your reservation, you can do it from the link below\n\n${url}\n\nWe take great care about our food loss and our environment, so if you wish to cancel the reservation, please notify us at least 24h ahead of your reservation.\n\nLate cancelation or no show might affect your reservation credentials`;
     return message;
 }

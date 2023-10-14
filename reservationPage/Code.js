@@ -15,18 +15,18 @@ function doGet(e) {
     htmlOutput.time = e.parameter['time'];
     htmlOutput.seats = e.parameter['seats'];
     htmlOutput.isTable = e.parameter['isTable'];
-    return htmlOutput.evaluate();
+    return htmlOutput.evaluate().addMetaTag("viewport", "width=device-width, initial-scale=1");
   }
   else if(e.parameter['page'] == 'formSubmitted')
   {
     var htmlOutput =  HtmlService.createTemplateFromFile('formSubmitted');
-    return htmlOutput.evaluate();
+    return htmlOutput.evaluate().addMetaTag("viewport", "width=device-width, initial-scale=1");
   }
   else if(e.parameter['page'] == 'cancelReservation')
   {
     var htmlOutput =  HtmlService.createTemplateFromFile('cancelReservation');
     htmlOutput.uuid = e.parameter['uuid'];
-    return htmlOutput.evaluate();
+    return htmlOutput.evaluate().addMetaTag("viewport", "width=device-width, initial-scale=1");
   }
 }
 

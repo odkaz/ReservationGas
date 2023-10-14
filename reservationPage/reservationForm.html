@@ -52,6 +52,7 @@
         </div>
         <div id="slotContainer" class="slot-container">
         </div>
+
       </form>
     </div>
 
@@ -108,49 +109,49 @@
       //       showLoaderScreen();
       }
 
-      function gotSlots(result) {
-        const slots = JSON.parse(result);
-        console.log(slots);
-        setSlots(slots);
-        // hideLoaderScreen();
-      }
-
-      function formatTime(stamp) {
-        let d = new Date(stamp);
-        let hr = d.getUTCHours();
-        let min = d.getUTCMinutes();
-        if (min < 10) {
-          min = "0" + min;
+        function gotSlots(result) {
+          const slots = JSON.parse(result);
+          console.log(slots);
+          setSlots(slots);
+          // hideLoaderScreen();
         }
-        return hr + ':' + min;
-      }
 
-      function setSlots(slots) {
-        //lunch slots
-        if (slots.lunch.length == 0) {
-          $("#lunchSlots").append(`<div>No Slots Available</div>`);
-        } else {
-          for (i = 0; i < slots.lunch.length; i++) {
-            $("#lunchSlots").append(`<button id="lunchSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.lunch[i].time)}</button>`);
-            $(`#lunchSlot-${i}`).on("click", {'param': slots.lunch[i]}, function(e) {
-              // submitReservation(e.data.param);
-              Link1(e.data.param);
-            });
+        function formatTime(stamp) {
+          let d = new Date(stamp);
+          let hr = d.getUTCHours();
+          let min = d.getUTCMinutes();
+          if (min < 10) {
+            min = "0" + min;
+          }
+          return hr + ':' + min;
+        }
+
+        function setSlots(slots) {
+          //lunch slots
+          if (slots.lunch.length == 0) {
+            $("#lunchSlots").append(`<div>No Slots Available</div>`);
+          } else {
+            for (i = 0; i < slots.lunch.length; i++) {
+              $("#lunchSlots").append(`<button id="lunchSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.lunch[i].time)}</button>`);
+              $(`#lunchSlot-${i}`).on("click", {'param': slots.lunch[i]}, function(e) {
+                // submitReservation(e.data.param);
+                Link1(e.data.param);
+              });
+            }
+          }
+          //dinner slots
+          if (slots.dinner.length == 0) {
+            $("#dinnerSlots").append(`<div>No Slots Available</div>`);
+          } else {
+            for (i = 0; i < slots.dinner.length; i++) {
+              $("#dinnerSlots").append(`<button id="dinnerSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.dinner[i].time)}</button>`);
+              $(`#dinnerSlot-${i}`).on("click", {'param': slots.dinner[i]}, function(e) {
+                // submitReservation(e.data.param);
+                Link1(e.data.param);
+              });
+            }
           }
         }
-        //dinner slots
-        if (slots.dinner.length == 0) {
-          $("#dinnerSlots").append(`<div>No Slots Available</div>`);
-        } else {
-          for (i = 0; i < slots.dinner.length; i++) {
-            $("#dinnerSlots").append(`<button id="dinnerSlot-${i}" type="button" class="btn btn-outline-dark">${formatTime(slots.dinner[i].time)}</button>`);
-            $(`#dinnerSlot-${i}`).on("click", {'param': slots.dinner[i]}, function(e) {
-              // submitReservation(e.data.param);
-              Link1(e.data.param);
-            });
-          }
-        }
-      }
 
       function getDateString(date) {
         let currentDate = new Date(date);
