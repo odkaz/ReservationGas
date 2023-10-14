@@ -196,6 +196,13 @@
 
       const getTimeSlots = () => {
         let data = $("#datePicker").val();
+        $("#slotsContainer").html(``);
+        $("#slotsContainer").append(`
+          <div class="d-flex justify-content-center">
+            <div class="spinner-grow" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>`);
         google.script.run.withSuccessHandler(getReservationSuccess)
         .withFailureHandler(getReservationFailure)
         .getReservationsByDate(data);
@@ -273,7 +280,7 @@
             </div>`);
             if (customer[notesPos] != "") {
               //add notification
-              $(`#summary-${i}-${j}`).append(`<i class="bi-chat-right-dots" style="font-size:22px;"></i>`);
+              $(`#summary-${i}-${j}`).append(`<i class="bi-chat-right-dots" style="font-size:22px;color:#ef4900;"></i>`);
             }
             if (cancel) {
               $(`#nameContainer-${i}-${j}`).append(`<span class="text-danger ms-1">Canceled</span>`);
@@ -362,7 +369,7 @@
         let modal = document.getElementById("myModal");
         modal.style.display = "none";
         //reload slots
-        $("#slotsContainer").html(``);
+        // $("#slotsContainer").html(``);
         getTimeSlots();
       }
 
