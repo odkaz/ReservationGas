@@ -88,7 +88,7 @@
                 </form>
 
                 <p class="h5 mt-5">3. Enter Details</p>
-                <form onsubmit="return false;" class="needs-validation g-3" novalidate>
+                <form id="formDetails" onsubmit="return false;" class="needs-validation g-3" novalidate>
                   <div class="row mt-3">
                     <div class="col-8">
                       <input id="firstName" type="text" class="form-control" placeholder="First name" required>
@@ -124,7 +124,7 @@
     <script>
       $(document).ready(function() {
         // init flatpickr
-        let pickerElement = $("#datePicker").flatpickr({
+        $("#datePicker").flatpickr({
             enableTime: false,
             dateFormat: "F, d Y",
             defaultDate: Date.now(),
@@ -132,7 +132,8 @@
         });
 
         $("#searchIcon").click(function () {
-          pickerElement.open();
+          let elem = $("#datePicker").flatpickr();
+          elem.open();
         });
 
         $("#reservationDate").flatpickr({
@@ -159,6 +160,11 @@
         }
         $("#submitBtn").on("click", function() {
           submitReservation();
+          //clear form
+          let elem = $("#reservationDate").flatpickr();
+          elem.clear();
+          $("#seatNum").val("");
+          $("#formDetails").trigger("reset");
         });
 
         $("#refreshBtn").on("click", function() {
