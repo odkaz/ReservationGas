@@ -55,6 +55,14 @@
         <i id="refreshBtn" class="bi-arrow-clockwise ms-2 me-2 text-white" style="font-size:20px;"></i>
       </div>
     </div>
+    <div id="alertContainer"></div>
+    <!-- Success Alert -->
+    <!-- <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
+        <i class="bi-check-circle-fill"></i>
+        <strong class="mx-2">Success!</strong> Your message has been sent successfully.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div> -->
+
     <div class="container">
 
 
@@ -195,6 +203,15 @@
       function getReservationFailure() {
         console.log("get reservation failure");
         //show a modal with failure
+      }
+
+      function newAlert (type, message) {
+          $("#alertContainer").append(`
+          <div class="alert alert-${type} alert-dismissible d-flex align-items-center fade show">
+            <i class="bi-check-circle-fill"></i>
+            <strong class="mx-2">Success!</strong> ${message}
+          </div>`);
+          $(".alert").delay(3000).fadeOut("slow", function () { $(this).remove(); });
       }
 
       const getTimeSlots = () => {
@@ -371,17 +388,29 @@
       function submitSuccess() {
         let modal = document.getElementById("myModal");
         modal.style.display = "none";
+        newAlert('success', 'Reservation added successfully');
+
         //reload slots
-        // $("#slotsContainer").html(``);
         getTimeSlots();
       }
 
-      function submitFailure() {
-        //show a modal with failure
+      function submitFailure(error) {
+        newAlert('danger', error);
+        getTimeSlots();
+      }
+
+      function cancelSuccess() {
+        newAlert('success', 'Canceled successfully');
+        getTimeSlots();
+      }
+
+      function cancelFailure(error) {
+        newAlert('danger', error);
+        getTimeSlots();
       }
 
       const onCancel = (uuid) => {
-        google.script.run.withSuccessHandler(submitSuccess()).cancelByUuid(uuid);
+        google.script.run.withSuccessHandler(cancelSuccess()).withFailureHandler(cancelFailure).cancelByUuid(uuid);
       }
 
       const submitReservation = () => {
@@ -395,7 +424,7 @@
         let dataToSend = {
           firstName, date, time, seats, isTable, notes, phone,
         }
-        google.script.run.withSuccessHandler(submitSuccess()).addAdminReservation(dataToSend);
+        google.script.run.withSuccessHandler(submitSuccess()).withFailureHandler(submitFailure).addAdminReservation(dataToSend);
       }
     </script>
   </body>
