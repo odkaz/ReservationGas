@@ -45,26 +45,25 @@
   </head>
   <body>
     <div class="header">
-      <div class="p-2 d-flex flex-row align-items-center justify-content-end bg-dark">
-        <!-- <button id="myBtn" type="button" class="btn btn-light">Create New</button> -->
-        <div class="date-container d-flex flex-row align-items-center">
-          <i id="searchIcon" class="bi-search m-3" style="font-size:20px;color:white;"></i>
-          <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
+      <div class="p-2 d-flex flex-row align-items-center justify-content-between bg-dark">
+          <img src="https://drive.google.com/uc?export=download&id=12aZqwj6Mnwbcpyu6uawWTUJpbX_plf7h"
+            alt="Generic placeholder image"
+            style="width: 100px; height: 50px; object-fit: contain; border-radius: 10px;">
+        <div>
+          <div class="date-container d-flex flex-row align-items-center">
+            <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
+              <i id="addBtn" class="bi-plus ms-2 text-white" style="font-size:30px;"></i>
+              <i id="refreshBtn" class="bi-arrow-clockwise ms-2 me-2 text-white" style="font-size:20px;"></i>
+          </div>
+
+
         </div>
-        <i id="addBtn" class="bi-plus ms-2 text-white" style="font-size:30px;"></i>
-        <i id="refreshBtn" class="bi-arrow-clockwise ms-2 me-2 text-white" style="font-size:20px;"></i>
+
       </div>
     </div>
     <div id="alertContainer"></div>
-    <!-- Success Alert -->
-    <!-- <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
-        <i class="bi-check-circle-fill"></i>
-        <strong class="mx-2">Success!</strong> Your message has been sent successfully.
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div> -->
 
     <div class="container">
-
 
       <div class="modal" id="myModal" tabindex="-1">
         <div class="modal-dialog">
@@ -125,7 +124,7 @@
         </div>
       </div>
 
-      <div id="slotsContainer" class="mt-5"></div>
+      <div id="slotsContainer" class="mt-5 px-3"></div>
 
     </div>
     <input type="hidden" value="" id="typeSelected" />
@@ -140,11 +139,6 @@
             dateFormat: "F, d Y",
             defaultDate: Date.now(),
             onChange: () => getTimeSlots(),
-        });
-
-        $("#searchIcon").click(function () {
-          let elem = $("#datePicker").flatpickr();
-          elem.open();
         });
 
         $("#reservationDate").flatpickr({
