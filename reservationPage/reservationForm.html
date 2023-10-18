@@ -91,22 +91,20 @@
       }
 
       const getTimeSlots = () => {
-        $("#slotContainer").html(`
-          <label for="lunchSlots" class="form-label mt-4">Lunch</label>
-          <div id="lunchSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-          </div>
-          <label for="dinnerSlots" class="form-label mt-4">Dinner</label>
-          <div id="dinnerSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-          </div>`
-        );
         console.log($("#datePicker").val());
         let dataToSend = {
           date: $("#datePicker").val(),
           seats: $("#seatNum").val(),
         };
         console.log(dataToSend);
+        clearSlots();
+        $("#slotContainer").html(`
+          <div class="mt-4 d-flex justify-content-center align-items-center">
+            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+            <span class="ms-3">Loading...</span>
+          </div>
+        `);
         google.script.run.withSuccessHandler(gotSlots).getAvailableSlots(dataToSend);
-      //       showLoaderScreen();
       }
 
         function gotSlots(result) {
@@ -127,6 +125,15 @@
         }
 
         function setSlots(slots) {
+          clearSlots();
+          $("#slotContainer").html(`
+          <label for="lunchSlots" class="form-label mt-4">Lunch</label>
+          <div id="lunchSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          </div>
+          <label for="dinnerSlots" class="form-label mt-4">Dinner</label>
+          <div id="dinnerSlots" class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          </div>`
+          );
           //lunch slots
           if (slots.lunch.length == 0) {
             $("#lunchSlots").append(`<div>No Slots Available</div>`);
