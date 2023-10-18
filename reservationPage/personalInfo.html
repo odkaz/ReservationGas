@@ -94,14 +94,10 @@
       <div class="col-md-6">
         <input id="notes" type="text" class="form-control" placeholder="Add a special request (optional)">
       </div>
+
       <div id="checkTable" class="col-12">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="check1" required>
-          <label class="form-check-label" for="check1">
-            I understand that the seat will be served in the table
-          </label>
-        </div>
       </div>
+
       <div class="col-12">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="check2" required>
@@ -133,60 +129,51 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
       $(document).ready(function() {
+        let seats = $("#seats").val();
+        let seatsTxt = seats == 1 ? seats + ' Person' : seats + ' People'
+        let isTable = $("#isTable").val() == 'true';
+        let type = isTable ? 'table' : 'counter';
+        let infoTxt = seatsTxt + ' (' + type + ' seat)';
+        $("#seatInfo").text(infoTxt);
+        if (!isTable) {
+          $("#onlyTable").hide();
+          $("#checkTable").hide();
+        } else {
+          $("#checkTable").append(`
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="check1" required>
+              <label class="form-check-label" for="check1">
+                I understand that the seat will be served in the table
+              </label>
+            </div>
+          `)
+        }
+        enableValidation();
+      });
+
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      const enableValidation = () => {
         'use strict'
+
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
         var forms = document.querySelectorAll('.needs-validation')
 
         // Loop over them and prevent submission
         Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-          form.addEventListener('submit', function (event) {
-              if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-              } else {
-                submitReservation();
-              }
-              form.classList.add('was-validated')
-          }, false)
-        })
-
-        let seats = $("#seats").val();
-        let seatsTxt = seats == 1 ? seats + ' Person' : seats + ' People'
-        let isTable = $("#isTable").val() == 'true';
-        let type = isTable ? 'table' : 'counter';
-        let info = seatsTxt + ' (' + type + ' seat)';
-        $("#seatInfo").text(info);
-        if (!isTable) {
-          $("#onlyTable").hide();
-          $("#checkTable").hide();
-        }
-
-      })
-
-
-
-      // Example starter JavaScript for disabling form submissions if there are invalid fields
-      // (function () {
-      // 'use strict'
-
-      // // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      // var forms = document.querySelectorAll('.needs-validation')
-
-      // // Loop over them and prevent submission
-      // Array.prototype.slice.call(forms)
-      //   .forEach(function (form) {
-      //     form.addEventListener('submit', function (event) {
-      //         if (!form.checkValidity()) {
-      //           event.preventDefault()
-      //           event.stopPropagation()
-      //         } else {
-      //           submitReservation();
-      //         }
-      //         form.classList.add('was-validated')
-      //     }, false)
-      //   })
-      // })()
+          .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                  console.log('invalid');
+                  console.log(form);
+                  event.preventDefault()
+                  event.stopPropagation()
+                } else {
+                  submitReservation();
+                }
+                form.classList.add('was-validated')
+            }, false)
+          })
+      }
       //==========tel phone=========
       const phoneInputField = document.querySelector("#phone");
       const phoneInput = window.intlTelInput(phoneInputField, {
