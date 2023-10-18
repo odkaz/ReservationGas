@@ -115,7 +115,7 @@
         </div>
       </div>
       <div class="col-12">
-        <button type="submit" class="btn btn-dark submit-btn">Complete reservation</button>
+        <button id="submitBtn" type="submit" class="btn btn-dark submit-btn">Complete reservation</button>
       </div>
     </form>
     <div class="alert alert-info" style="display: none;"></div>
@@ -168,8 +168,6 @@
           .forEach(function (form) {
             form.addEventListener('submit', function (event) {
                 if (!form.checkValidity()) {
-                  console.log('invalid');
-                  console.log(form);
                   event.preventDefault()
                   event.stopPropagation()
                 } else {
@@ -206,6 +204,14 @@
       }
 
      const submitReservation = () => {
+        $("#submitBtn").addClass("disabled");
+        $("#submitBtn").html(`
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        `);
         let firstName = $("#firstName").val();
         let lastName = $("#lastName").val();
         let date = $("#date").val();
@@ -227,12 +233,10 @@
       }
 
       const bookSuccess = () => {
-        // console.log("success");
         toLink(false);
       }
 
       const bookError = (error) => {
-        // console.log("failure");
         console.log(error);
         toLink(true);
       }
