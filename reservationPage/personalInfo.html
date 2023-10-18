@@ -47,7 +47,7 @@
               <div class="flex-grow-1 ms-2">
               <div>
                 <h5 class="mb-1">Itosugi Reservation</h5>
-                <p class="mb-2 pb-1" style="color: #2b2a2a;">Dinner plan</p>
+                <p id="plan" class="mb-2 pb-1" style="color: #2b2a2a;"></p>
               </div>
             </div>
           </div>
@@ -135,6 +135,11 @@
         let type = isTable ? 'table' : 'counter';
         let infoTxt = seatsTxt + ' (' + type + ' seat)';
         $("#seatInfo").text(infoTxt);
+        if (isDinner($("#time").val())) {
+          $("#plan").text('Dinner plan');
+        } else {
+          $("#plan").text('Lunch plan');
+        }
         if (!isTable) {
           $("#onlyTable").hide();
           $("#checkTable").hide();
@@ -190,6 +195,14 @@
         link.id = 'linkURL';
         document.body.appendChild(link);
         document.getElementById("linkURL").click();
+      }
+
+      function isDinner(time) {
+        const hour = time.substring(0, time.indexOf(":"));
+        if (Number(hour) < 16) {
+          return false;
+        }
+        return true;
       }
 
      const submitReservation = () => {
