@@ -102,26 +102,26 @@ function getSlots(date) {
   let startTime = date;
   let endTime = new Date(startTime.getTime());
   endTime.setDate(startTime.getDate() + 1);
-  console.log(startTime);
-  console.log(endTime);
   let events = cal.getEvents(startTime, endTime);
   return events;
 }
 
 function getAvailableSlots(data) {
-  // let date = new Date("10/15/2023");
+  // let date = new Date("October, 19 2023");
+  // let seats = '1'
   let date = new Date(data.date);
   let seats = data.seats;
   let reserved = getReserved(date);
   let slots = getSlots(date);
   let dinnerTime = new Date(date.getTime());
-  let now = Date.now();
+  let tmr = new Date(Date.now());
+  tmr.setDate(tmr.getDate() + 1);
   dinnerTime.setHours(16);
   let lunch = [];
   let dinner = [];
   for (let i = 0; i < slots.length; i++) {
     let startTime = slots[i].getStartTime();
-    if (startTime < now) continue;
+    if (startTime < tmr) continue;
     let seatType = checkSeat(startTime, reserved, seats);
     if (!seatType) continue;
     if (startTime < dinnerTime) {
