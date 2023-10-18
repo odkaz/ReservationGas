@@ -116,6 +116,7 @@ function getAvailableSlots(data) {
   let dinnerTime = new Date(date.getTime());
   let tmr = new Date(Date.now());
   tmr.setDate(tmr.getDate() + 1);
+  tmr.setHours(tmr.getHours() - 7); //Time zone
   dinnerTime.setHours(16);
   let lunch = [];
   let dinner = [];
