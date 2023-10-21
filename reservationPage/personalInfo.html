@@ -65,12 +65,12 @@
         </div>
         <div>
           <p class="small text-muted mb-1">Seats</p>
-          <p id="seatInfo" class="mb-0"><?= seats ?> People (counter seat)</p>
+          <p id="seatInfo" class="mb-0"><?= seats ?> People (bar seat)</p>
         </div>
       </div>
     </div>
     <div id="onlyTable" class="table-text mb-5">
-      Counter seats are already full for this scheduel. Only table seats are available.
+      Bar seats are already full for this scheduel. Only table seats are available.
     </div>
     <form onsubmit="return false;" class="needs-validation row g-3" novalidate>
       <div class="col-md-6">
@@ -90,17 +90,17 @@
       </div>
 
       <div class="col-md-6">
-        <input id="notes" type="text" class="form-control" placeholder="Add a special request (optional)">
+        <input id="notes" type="text" class="form-control" placeholder="Special request (optional)">
       </div>
 
-      <div id="checkTable" class="col-12">
-      </div>
+      <!-- <div id="checkTable" class="col-12">
+      </div> -->
 
       <div class="col-12">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="check2" required>
           <label class="form-check-label" for="check2">
-            Please indicate the ages of your children in the request box
+            Please note that we do not serve alcohol.
           </label>
         </div>
       </div>
@@ -108,7 +108,15 @@
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="check3" required>
           <label class="form-check-label" for="check3">
-            Please indicate any alergies in the request box
+            Please indicate any dietary restrictions and the number of people affected by them in the special request box.
+          </label>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="check4" required>
+          <label class="form-check-label" for="check4">
+            Please indicate the number of children under 10 years old in the special request box.
           </label>
         </div>
       </div>
@@ -130,7 +138,7 @@
         let seats = $("#seats").val();
         let seatsTxt = seats == 1 ? seats + ' Person' : seats + ' People'
         let isTable = $("#isTable").val() == 'true';
-        let type = isTable ? 'table' : 'counter';
+        let type = isTable ? 'table' : 'bar';
         let infoTxt = seatsTxt + ' (' + type + ' seat)';
         $("#seatInfo").text(infoTxt);
         if (isDinner($("#time").val())) {
@@ -140,16 +148,6 @@
         }
         if (!isTable) {
           $("#onlyTable").hide();
-          $("#checkTable").hide();
-        } else {
-          $("#checkTable").append(`
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="check1" required>
-              <label class="form-check-label" for="check1">
-                I understand that the seat will be served in the table
-              </label>
-            </div>
-          `)
         }
         enableValidation();
       });
