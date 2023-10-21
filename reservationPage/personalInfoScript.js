@@ -46,11 +46,6 @@ function updateFilterView() {
   dataSheet.getRange('A1:M').createFilter();
 }
 
-function test() {
-  let msg = getMessage('10/22/2023', '12:00', 'Table');
-  sendMail('112kazuma@gmail.com', msg);
-}
-
 function getMessage(date, time, type) {
   let message =
   `<div>
@@ -61,7 +56,7 @@ Date: ${date}<br>
 Time: ${time}<br>
 Seat Type: ${type}<br>
 <br>
-If you would like to make any special arrangements or make any changes to your reservation, please do not hesitate to call us directly ((604) 779-8528). <b>This is an automated email so please do not reply to this email.</b><br>
+If you would like to request any special arrangements or make any changes to your reservation, please do not hesitate to call us directly ((604) 779-8528). <b>This is an automated email so please do not reply to this email.</b><br>
 <br>
 We take great care to minimize food waste. If you need to cancel your reservation, please notify us at least 48 hours in advance.<br>
 <br>
@@ -75,10 +70,5 @@ Vancouver, BC.<br>
 <br>
 (604) 779-8528<br>
   </div>`;
-
-
-
-    // let message =
-    //   `<div>Thank you for making a reservation with Itosugi. Your reservation is as follows.<br><br>Date: ` + date + `<br>Time: ` + time + `<br>Seat: ` + type + `<br><br>If you wish to cancel your reservation, or ask anything please call the number below<br><br>(604) 779-8528<br><br>We take great care about our food loss and our environment, so if you wish to cancel the reservation, please notify us at least 24h ahead of your reservation.<br><br>Late cancelation or no show might affect your reservation credentials<div>`;
     return message;
 }
