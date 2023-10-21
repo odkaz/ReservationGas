@@ -107,7 +107,7 @@ function getSlots(date) {
 }
 
 function getAvailableSlots(data) {
-  // let date = new Date("October, 19 2023");
+  // let date = new Date("October, 22 2023");
   // let seats = '1'
   let date = new Date(data.date);
   let seats = data.seats;
