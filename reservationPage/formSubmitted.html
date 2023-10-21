@@ -11,7 +11,7 @@
   </head>
    <body>
     <div id="submitFail" style="display:none;">
-      Sorry, somthing went wrong during reservation, please try again.
+      Sorry, the date was already taken by another person. Please select another date.
     </div>
     <div id="submitSuccess" style="display:none;">
       <div class="vh-100 d-flex justify-content-center align-items-center">
@@ -26,7 +26,7 @@
             </div>
             <div class="text-center">
                 <h1>Thank You !</h1>
-                <p>Your reservation was successful. We have sent un conformation email to your mailbox.</p>
+                <p>Your reservation was successful. We have sent a conformation email to your mailbox.</p>
                 <button onclick="Back()" class="btn btn-outline-dark">Back Home</button>
             </div>
         </div>
@@ -47,14 +47,14 @@
         }
       };
       function Back()
-      {  
-        var url = document.getElementById("url").value;
+      {
+        var url = "https://itosugikappocuisine.ca/";
         var link = document.createElement('a');
         link.href = url;
         link.id = 'linkURL';
         document.body.appendChild(link);
-        document.getElementById("linkURL").click();  
+        document.getElementById("linkURL").click();
       }
-      </script>  
+      </script>
    </body>
 </html>
