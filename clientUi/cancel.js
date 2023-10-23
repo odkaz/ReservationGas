@@ -17,3 +17,4 @@ function cancelByUuid(uuid) {
 	//not found, err
 	throw new Error("The slot was not found");
   }
+  

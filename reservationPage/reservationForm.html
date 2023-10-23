@@ -165,9 +165,8 @@
         let currentDayOfMonth = currentDate.getDate();
         let currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
         let currentYear = currentDate.getFullYear();
+        let dateString = currentYear + "-" + (currentMonth + 1) + "-" + currentDayOfMonth;
 
-        let dateString = (currentMonth + 1) + "/" + currentDayOfMonth + "/" + currentYear;
-        // "27-11-2020"
         return dateString;
       }
 
