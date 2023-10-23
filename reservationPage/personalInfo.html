@@ -22,6 +22,13 @@
         border-radius: 4px;
         background-color: lightgray;
       }
+      .notification {
+        width: 100%;
+        padding: 10px 20px;
+        border-radius: 4px;
+        background-color: black;
+        color: white;
+      }
       .submit-btn {
         width: 100%;
       }
@@ -57,21 +64,22 @@
         style="background-color: #efefef;">
         <div>
           <p class="small text-muted mb-1">Date</p>
-          <p class="mb-0"><?= date ?></p>
+          <p class="mb-0 fw-bold text-nowrap"><?= date ?></p>
         </div>
         <div class="px-4">
           <p class="small text-muted mb-1">Time</p>
-          <p class="mb-0"><?= time ?></p>
+          <p class="mb-0 fw-bold"><?= time ?></p>
         </div>
         <div>
           <p class="small text-muted mb-1">Seats</p>
-          <p id="seatInfo" class="mb-0"><?= seats ?> People (bar seat)</p>
+          <p id="seatInfo" class="mb-0 fw-bold"><?= seats ?> People (bar seat)</p>
         </div>
       </div>
     </div>
-    <div id="onlyTable" class="table-text mb-5">
-      Bar seats are already full for this scheduel. Only table seats are available.
+    <div id="newsContainer">
+
     </div>
+
     <form onsubmit="return false;" class="needs-validation row g-3" novalidate>
       <div class="col-md-6">
         <input id="firstName" type="text" class="form-control" placeholder="First name" required>
@@ -146,11 +154,32 @@
         } else {
           $("#plan").text('Lunch plan');
         }
-        if (!isTable) {
-          $("#onlyTable").hide();
-        }
+        appendNotification();
+
         enableValidation();
       });
+
+      function appendNotification() {
+        let isTable = $("#isTable").val() == 'true';
+
+        if (isTable) {
+          $("#newsContainer").append(`
+            <div id="onlyTable" class="table-text mb-2">
+              Bar seats are already full for this scheduel. Only table seats are available.
+            </div>
+          `);
+        }
+
+        let d = $("#date").val();
+
+        if (d == "2023-10-29") {
+          $("#newsContainer").append(`
+            <div class="mb-2 notification">
+              On October 29th, we will be offering a special omakase course featuring shojin-ryori, traditional Japanese vegetarian cuisine. The menu will include kappo and sushi items, all prepared without any animal products, including fish. The cost is $55 per person.
+            </div>
+          `);
+        }
+      }
 
       // Example starter JavaScript for disabling form submissions if there are invalid fields
       const enableValidation = () => {
