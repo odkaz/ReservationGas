@@ -73,7 +73,7 @@
                   <div class="date-container">
                     <p class="h5">1. Search for Seats</p>
                     <input type="text" class="form-control mt-3" id="reservationDate" placeholder="Please select Date Time">
-                    <select id="seatNum" onchange="clearSlots()" class="form-select mt-3">
+                    <select id="seatNum" onchange="clearSelectedSlot()" class="form-select mt-3">
                       <option selected>Please select number of seats</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
@@ -86,7 +86,7 @@
                     <button type="button" onClick="getOpenSlots()" class="btn btn-dark mt-3">Search</button>
                   </div>
                   <p class="h5 mt-5">2. Select Time</p>
-                  <div id="slotContainer" class="slot-container">
+                  <div id="openSlots" class="slot-container">
                   </div>
                   <div id="timeText"></div>
 
@@ -140,7 +140,7 @@
           minDate: "today",
           enableTime: false,
           dateFormat: "F, d Y",
-          onChange: () => clearSlots(),
+          onChange: () => clearSelectedSlot(),
         });
 
         // Get the modal
@@ -213,6 +213,7 @@
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>`);
+          console.log(data);
         google.script.run.withSuccessHandler(getReservationSuccess)
         .withFailureHandler(getReservationFailure)
         .getReservationsByDate(data);
@@ -310,8 +311,8 @@
 
 
 //============================For Modal==========================//
-      const clearSlots = () => {
-          $("#slotContainer").html(``);
+      const clearSelectedSlot = () => {
+          $("#openSlots").html(``);
           $("#timeSelected").val("");
           $("#typeSelected").val("");
         }
@@ -328,6 +329,13 @@
       }
 
       const getOpenSlots = () => {
+        clearSelectedSlot();
+        $("#openSlots").html(`
+          <div class="mt-4 d-flex justify-content-center align-items-center">
+            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+            <span class="ms-3">Loading...</span>
+          </div>
+        `);
         let dataToSend = {
           date: $("#reservationDate").val(),
           seats: $("#seatNum").val(),
@@ -351,12 +359,12 @@
       }
 
       function setSlots(slots) {
-        clearSlots();
+        clearSelectedSlot();
         if (slots.length == 0) {
-          $("#slotContainer").append(`<div>No Slots Available</div>`);
+          $("#openSlots").append(`<div>No Slots Available</div>`);
         } else {
           for (i = 0; i < slots.length; i++) {
-            $("#slotContainer").append(`
+            $("#openSlots").append(`
               <input type="radio" class="btn-check" name="options-outlined" id="openSlot-${i}" autocomplete="off">
               <label class="btn btn-outline-dark" for="openSlot-${i}">${formatTime(slots[i].time)}</label>
             `);
@@ -364,7 +372,7 @@
             $(`#openSlot-${i}`).on("click", {'param': slots[i]}, function(e) {
               let type = e.data.param.isTable ? "Table" : "Bar";
               if ($("#typeSelected").val() == "") {
-                $("#slotContainer").append(`<div id="tableType" class="mt-2">Seat type: ${type}</div>`);
+                $("#openSlots").append(`<div id="tableType" class="mt-2">Seat type: ${type}</div>`);
               } else {
                 $("#tableType").text(`Seat type: ${type}`);
               }
