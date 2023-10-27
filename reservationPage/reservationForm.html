@@ -32,15 +32,14 @@
       <form>
         <div class="date-container">
           <div class="mb-3">
-            <label for="datePicker" class="form-label">Resevation date</label>
+            <label for="datePicker" class="form-label">Reservation date</label>
             <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
           </div>
           <div class="mb-3">
             <label for="seatNum" class="form-label">Seats</label>
             <select id="seatNum" class="form-select">
-              <option selected>Please select number of seats</option>
               <option value="1">1</option>
-              <option value="2">2</option>
+              <option value="2" selected="selected">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
@@ -51,6 +50,9 @@
           <button type="button" onClick="getTimeSlots()" class="btn btn-dark">Search</button>
         </div>
         <div id="slotContainer" class="slot-container">
+          <div class="p-4">
+            For reservations exceeding seven seats or for same-day bookings, please call us directly. <a href="tel:6047798528">(604) 779-8528</a>
+          </div>
         </div>
 
       </form>
