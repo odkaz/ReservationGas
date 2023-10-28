@@ -64,22 +64,21 @@
         style="background-color: #efefef;">
         <div>
           <p class="small text-muted mb-1">Date</p>
-          <p class="mb-0 fw-bold text-nowrap"><?= date ?></p>
+          <p class="mb-0 text-nowrap"><?= date ?></p>
         </div>
         <div class="px-4">
           <p class="small text-muted mb-1">Time</p>
-          <p class="mb-0 fw-bold"><?= time ?></p>
+          <p class="mb-0"><?= time ?></p>
         </div>
         <div>
           <p class="small text-muted mb-1">Seats</p>
-          <p id="seatInfo" class="mb-0 fw-bold"><?= seats ?> People (bar seat)</p>
+          <p id="seatInfo" class="mb-0"><?= seats ?> People (bar seat)</p>
         </div>
       </div>
     </div>
     <div id="newsContainer">
 
     </div>
-
     <form onsubmit="return false;" class="needs-validation row g-3" novalidate>
       <div class="col-md-6">
         <input id="firstName" type="text" class="form-control" placeholder="First name" required>
@@ -96,14 +95,9 @@
           Please type a valid email
         </div>
       </div>
-
       <div class="col-md-6">
         <input id="notes" type="text" class="form-control" placeholder="Special request (optional)">
       </div>
-
-      <!-- <div id="checkTable" class="col-12">
-      </div> -->
-
       <div class="col-12">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" id="check2" required>
@@ -129,7 +123,7 @@
         </div>
       </div>
       <div class="col-12">
-        <button id="submitBtn" type="submit" class="btn btn-dark submit-btn">Complete reservation</button>
+        <button id="submitBtn" type="submit" class="btn btn-dark submit-btn">Continue to Payment</button>
       </div>
     </form>
     <div class="alert alert-info" style="display: none;"></div>
@@ -155,7 +149,6 @@
           $("#plan").text('Lunch plan');
         }
         appendNotification();
-
         enableValidation();
       });
 
@@ -196,7 +189,7 @@
                   event.preventDefault()
                   event.stopPropagation()
                 } else {
-                  submitReservation();
+                  toLink()
                 }
                 form.classList.add('was-validated')
             }, false)
@@ -212,10 +205,21 @@
       const info = document.querySelector(".alert-info");
       //==========tel phone===========
 
-     function toLink(error) {
+     function toLink() {
+        localStorage.setItem('firstName',$("#firstName").val());
+        localStorage.setItem('lastName',$("#lastName").val());
+        localStorage.setItem('date',$("#date").val());
+        localStorage.setItem('time',$("#time").val());
+        localStorage.setItem('seats',$("#seats").val());
+        localStorage.setItem('seats',$("#seats").val());
+        localStorage.setItem('isTable',$("#isTable").val());
+        localStorage.setItem('notes',$("#notes").val());
+        localStorage.setItem('email',$("#email").val());
+        localStorage.setItem('phone',phoneInput.getNumber());
         var url = document.getElementById("url").value;
         var link = document.createElement('a');
-        link.href = url + "?page=formSubmitted&error=" + error;
+        link.href = url + "?page=registerCard";
+        link.id = 'linkURL';
         link.id = 'linkURL';
         document.body.appendChild(link);
         document.getElementById("linkURL").click();
@@ -227,44 +231,6 @@
           return false;
         }
         return true;
-      }
-
-     const submitReservation = () => {
-        $("#submitBtn").addClass("disabled");
-        $("#submitBtn").html(`
-          <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-        `);
-        let firstName = $("#firstName").val();
-        let lastName = $("#lastName").val();
-        let date = $("#date").val();
-        let time = $("#time").val();
-        let seats = $("#seats").val();
-        let isTable = $("#isTable").val();
-        let notes = $("#notes").val();
-        let email = $("#email").val();
-        let phone = phoneInput.getNumber();
-        let timeStamp = Date.now();
-        let dataToSend = {
-          firstName, lastName, date, time, seats, isTable, notes, email, phone, timeStamp,
-        }
-        console.log(dataToSend);
-        google.script.run
-          .withSuccessHandler(bookSuccess)
-          .withFailureHandler(bookError)
-          .addReservation(dataToSend);
-      }
-
-      const bookSuccess = () => {
-        toLink(false);
-      }
-
-      const bookError = (error) => {
-        console.log(error);
-        toLink(true);
       }
      </script>
    </body>

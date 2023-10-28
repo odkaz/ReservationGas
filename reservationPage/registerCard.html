@@ -153,20 +153,11 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-dark d-block h8 w-100">
+      <button id="submitBtn" type="submit" class="btn btn-dark d-block h8 w-100">
         Submit Reservation
       </button>
     </form>
   </div>
-  <input type="hidden" value="<?= firstName ?>" id="firstName" />
-  <input type="hidden" value="<?= lastName ?>" id="lastName" />
-  <input type="hidden" value="<?= date ?>" id="date" />
-  <input type="hidden" value="<?= time ?>" id="time" />
-  <input type="hidden" value="<?= seats ?>" id="seats" />
-  <input type="hidden" value="<?= isTable ?>" id="isTable" />
-  <input type="hidden" value="<?= notes ?>" id="notes" />
-  <input type="hidden" value="<?= email ?>" id="email" />
-  <input type="hidden" value="<?= phone ?>" id="phone" />
   <?var url = getUrl();?><input type="hidden" value="<?= url ?>" id="url" />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -207,15 +198,15 @@
             </div>
           </div>
         `);
-        let firstName = $("#firstName").val();
-        let lastName = $("#lastName").val();
-        let date = $("#date").val();
-        let time = $("#time").val();
-        let seats = $("#seats").val();
-        let isTable = $("#isTable").val();
-        let notes = $("#notes").val();
-        let email = $("#email").val();
-        let phone = $("#phone").val();
+        let firstName = localStorage.getItem('firstName');
+        let lastName = localStorage.getItem('lastName');
+        let date = localStorage.getItem('date');
+        let time = localStorage.getItem('time');
+        let seats = localStorage.getItem('seats');
+        let isTable = localStorage.getItem('isTable');
+        let notes = localStorage.getItem('notes');
+        let email = localStorage.getItem('email');
+        let phone = localStorage.getItem('phone');
         let timeStamp = Date.now();
         let dataToSend = {
           firstName, lastName, date, time, seats, isTable, notes, email, phone, timeStamp,
@@ -234,6 +225,15 @@
       const bookError = (error) => {
         console.log(error);
         toLink(true);
+      }
+
+      function toLink(error) {
+        var url = document.getElementById("url").value;
+        var link = document.createElement('a');
+        link.href = url + "?page=formSubmitted&error=" + error;
+        link.id = 'linkURL';
+        document.body.appendChild(link);
+        document.getElementById("linkURL").click();
       }
 
   </script>
