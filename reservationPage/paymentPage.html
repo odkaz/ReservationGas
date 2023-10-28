@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <base target="_top">
-    <title>Reservation</title>
+    <title>Cancel Policy - Itosugi</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,99 +14,93 @@
     <script src="https://kit.fontawesome.com/8ac6552500.js" crossorigin="anonymous"></script>
 
     <style>
-      /* @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap'); */
-      /* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&family=Poppins&display=swap'); */
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Poppins', sans-serif
+      }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif
-}
+      .container {
+          max-width: 900px;
+          margin: 30px auto;
+          padding: 30px;
+      }
 
-.container {
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 30px;
-}
+      .textmuted {
+          color: #7a7a7a
+      }
 
-.textmuted {
-    color: #7a7a7a
-}
+      .h7 {
+          font-size: 15px
+      }
 
-.h7 {
-    font-size: 15px
-}
+      .h8 {
+          font-size: 12px
+      }
 
-.h8 {
-    font-size: 12px
-}
+      .h9 {
+          font-size: 10px
+      }
 
-.h9 {
-    font-size: 10px
-}
+      .card input::placeholder {
+          font-size: 14px
+      }
 
-.card input::placeholder {
-    font-size: 14px
-}
+      ::placeholder {
+          font-size: 14px
+      }
 
-::placeholder {
-    font-size: 14px
-}
+      input.card {
+          position: relative
+      }
 
-input.card {
-    position: relative
-}
+      .far.fa-credit-card {
+          position: absolute;
+          top: 10px;
+          padding: 0 15px
+      }
 
-.far.fa-credit-card {
-    position: absolute;
-    top: 10px;
-    padding: 0 15px
-}
+      .fas,
+      .far {
+          cursor: pointer
+      }
 
-.fas,
-.far {
-    cursor: pointer
-}
+      .cursor {
+          cursor: pointer
+      }
 
-.cursor {
-    cursor: pointer
-}
+      div.list {
+        counter-reset: list-number;
+      }
 
+      div.list div {
+        position: relative;
+      }
 
-div.list {
-  counter-reset: list-number;
-}
+      div.list div:before {
+        counter-increment: list-number;
+        content: counter(list-number) ".";
+        position: absolute;
+        --size: 10px;
+        left: calc(-1 * var(--size) - 10px);
+      }
 
-div.list div {
-  position: relative;
-}
+      @media(max-width:320px) {
+          .h8 {
+              font-size: 11px
+          }
 
-div.list div:before {
-  counter-increment: list-number;
-  content: counter(list-number) ".";
-  position: absolute;
-  --size: 10px;
-  left: calc(-1 * var(--size) - 10px);
-}
+          .h7 {
+              font-size: 13px
+          }
 
-@media(max-width:320px) {
-    .h8 {
-        font-size: 11px
-    }
-
-    .h7 {
-        font-size: 13px
-    }
-
-    ::placeholder {
-        font-size: 10px
-    }
-}
+          ::placeholder {
+              font-size: 10px
+          }
+      }
     </style>
-
   </head>
-
   <body>
   <div class="alert alert-dark" role="alert">
     Your reservation is almost complete!
@@ -164,11 +158,16 @@ div.list div:before {
       </button>
     </form>
   </div>
-  <!-- <input type="hidden" value="<?= date ?>" id="date" />
+  <input type="hidden" value="<?= firstName ?>" id="firstName" />
+  <input type="hidden" value="<?= lastName ?>" id="lastName" />
+  <input type="hidden" value="<?= date ?>" id="date" />
   <input type="hidden" value="<?= time ?>" id="time" />
   <input type="hidden" value="<?= seats ?>" id="seats" />
   <input type="hidden" value="<?= isTable ?>" id="isTable" />
-  <?var url = getUrl();?><input type="hidden" value="<?= url ?>" id="url" /> -->
+  <input type="hidden" value="<?= notes ?>" id="notes" />
+  <input type="hidden" value="<?= email ?>" id="email" />
+  <input type="hidden" value="<?= phone ?>" id="phone" />
+  <?var url = getUrl();?><input type="hidden" value="<?= url ?>" id="url" />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script>
@@ -198,6 +197,44 @@ div.list div:before {
           }, false)
         })
     }
+
+    const submitReservation = () => {
+        $("#submitBtn").addClass("disabled");
+        $("#submitBtn").html(`
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        `);
+        let firstName = $("#firstName").val();
+        let lastName = $("#lastName").val();
+        let date = $("#date").val();
+        let time = $("#time").val();
+        let seats = $("#seats").val();
+        let isTable = $("#isTable").val();
+        let notes = $("#notes").val();
+        let email = $("#email").val();
+        let phone = $("#phone").val();
+        let timeStamp = Date.now();
+        let dataToSend = {
+          firstName, lastName, date, time, seats, isTable, notes, email, phone, timeStamp,
+        }
+        console.log(dataToSend);
+        google.script.run
+          .withSuccessHandler(bookSuccess)
+          .withFailureHandler(bookError)
+          .addReservation(dataToSend);
+      }
+
+      const bookSuccess = () => {
+        toLink(false);
+      }
+
+      const bookError = (error) => {
+        console.log(error);
+        toLink(true);
+      }
 
   </script>
   </body>
