@@ -39,7 +39,7 @@ function getReserved(date, includeCancels) {
 }
 
 function getReservationsByDate(data) {
-  // let date = new Date('October, 21 2023');
+  // let date = new Date('November, 03 2023');
   let date = new Date(data);
   let slots = getSlots(date);
   let reserved = getReserved(date, true);
@@ -60,7 +60,6 @@ function getReservationsByDate(data) {
     }
     res.push(d);
   }
-  console.log(res);
   return JSON.stringify(res);
 }
 
@@ -96,6 +95,8 @@ function checkSeat(time, reserved, seats) {
 function getAvailableSlots(data) {
   let date = new Date(data.date);
   let seats = data.seats;
+  let dinnerTime = new Date(date.getTime());
+  dinnerTime.setHours(16);
   let reserved = getReserved(date, false);
   let slots = getSlots(date);
   let res = [];
@@ -103,12 +104,12 @@ function getAvailableSlots(data) {
     let time = slots[i].getStartTime();
     let seatType = checkSeat(time, reserved, seats);
     if (!seatType) continue;
+    if (time < dinnerTime && seatType == "table") continue; //No tables for lunch
     res.push({
       time,
       isTable: seatType == "table",
     });
   }
-  console.log(res);
   return JSON.stringify(res);
 }
 

@@ -125,7 +125,7 @@ function getAvailableSlots(data) {
     if (startTime < tmr) continue;
     let seatType = checkSeat(startTime, reserved, seats);
     if (!seatType) continue;
-    if (startTime < dinnerTime) {
+    if (startTime < dinnerTime && seatType != "table") {
       lunch.push({
         time: startTime,
         isTable: seatType == "table",
