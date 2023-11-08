@@ -6,7 +6,7 @@ function addReservation(data) {
     sheet.appendRow([data.firstName, data.lastName, data.date, data.time, data.seats, data.isTable, data.notes, data.email, data.phone, data.timeStamp, uuid]);
     updateFilterView();
   } else {
-    throw new Error( `The slot is no longer available`);
+    throw new Error(`The slot is no longer available`);
   }
 
   //sms and mail
@@ -14,23 +14,23 @@ function addReservation(data) {
   let type = (data.isTable == 'true') ? 'Table' : 'Bar';
   let msg = getMessage(data.date, data.time, type);
 
-  // sendSms(data.phone, msg);
+  sendSms(data.phone, msg);
   sendMail(data.email, msg);
 }
 
 function checkReservation(date, time, seats, isTable) {
-  let shifts = JSON.parse(getAvailableSlots({date, seats}));
+  let shifts = JSON.parse(getAvailableSlots({ date, seats }));
   console.log(shifts);
   for (let i = 0; i < shifts.lunch.length; i++) {
     if (time == formatTime(shifts.lunch[i].time)
-      &&isTable == shifts.lunch[i].isTable) {
-        return true;
+      && isTable == shifts.lunch[i].isTable) {
+      return true;
     }
   }
   for (let i = 0; i < shifts.dinner.length; i++) {
     if (time == formatTime(shifts.dinner[i].time)
-      &&isTable == shifts.dinner[i].isTable) {
-        return true;
+      && isTable == shifts.dinner[i].isTable) {
+      return true;
     }
   }
   return false;
@@ -48,7 +48,7 @@ function updateFilterView() {
 
 function getMessage(date, time, type) {
   let message =
-  `<div>
+    `<div>
 
   Thank you for booking your reservation with us. Your reservation is as follows.<br>
 <br>
@@ -70,5 +70,5 @@ Vancouver, BC.<br>
 <br>
 (604) 779-8528<br>
   </div>`;
-    return message;
+  return message;
 }

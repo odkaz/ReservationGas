@@ -1,8 +1,5 @@
 function sendSms(number, message) {
-
-	// var dstPhoneNumber = '+16047234573';
-	// var message = 'Hello world!';
-	var dstPhoneNumber = '+33769426915';
+	let dstPhoneNumber = number;
 	sendTwilioSms(dstPhoneNumber, message);
 	console.log('sent');
 }
