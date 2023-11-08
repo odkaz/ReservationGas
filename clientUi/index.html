@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base target="_top">
+    <base target="_top" />
     <title>Manage Reservation</title>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
 
     <!-- Bootstrap Font Icon CSS -->
-    <link rel="stylesheet" href=
-    "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
 
     <!-- Flatpickr -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/themes/dark.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/themes/dark.css"
+    />
 
     <!-- intl tel input plugin -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
     <style>
       .modal {
@@ -31,8 +47,8 @@
         width: 100%;
         height: 100%;
         overflow: auto;
-        background-color: rgb(0,0,0);
-        background-color: rgba(0,0,0,0.4);
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
       }
       .intl-tel-input {
         width: 100%;
@@ -45,13 +61,38 @@
   </head>
   <body>
     <div class="header">
-      <div class="p-2 d-flex flex-row align-items-center justify-content-between bg-dark">
-        <img src="https://i.ibb.co/1fNVhyk/wabi.png" style="width: 100px; height: 50px; object-fit: contain; border-radius: 10px;" alt="wabi" border="0">
+      <div
+        class="p-2 d-flex flex-row align-items-center justify-content-between bg-dark"
+      >
+        <img
+          src="https://i.ibb.co/1fNVhyk/wabi.png"
+          style="
+            width: 100px;
+            height: 50px;
+            object-fit: contain;
+            border-radius: 10px;
+          "
+          alt="wabi"
+          border="0"
+        />
         <div>
           <div class="date-container d-flex flex-row align-items-center">
-            <input type="text" class="form-control" id="datePicker" placeholder="Please select Date Time">
-              <i id="addBtn" class="bi-plus ms-2 text-white" style="font-size:30px;"></i>
-              <i id="refreshBtn" class="bi-arrow-clockwise ms-2 me-2 text-white" style="font-size:20px;"></i>
+            <input
+              type="text"
+              class="form-control"
+              id="datePicker"
+              placeholder="Please select Date Time"
+            />
+            <i
+              id="addBtn"
+              class="bi-plus ms-2 text-white"
+              style="font-size: 30px"
+            ></i>
+            <i
+              id="refreshBtn"
+              class="bi-arrow-clockwise ms-2 me-2 text-white"
+              style="font-size: 20px"
+            ></i>
           </div>
         </div>
       </div>
@@ -59,21 +100,34 @@
     <div id="alertContainer"></div>
 
     <div class="container">
-
       <div class="modal" id="myModal" tabindex="-1">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <p class="modal-title h2">Add Reservation</p>
-              <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button
+                type="button"
+                class="close btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
             <div class="modal-body">
               <div class="form-container">
                 <form>
                   <div class="date-container">
                     <p class="h5">1. Search for Seats</p>
-                    <input type="text" class="form-control mt-3" id="reservationDate" placeholder="Please select Date Time">
-                    <select id="seatNum" onchange="clearSelectedSlot()" class="form-select mt-3">
+                    <input
+                      type="text"
+                      class="form-control mt-3"
+                      id="reservationDate"
+                      placeholder="Please select Date Time"
+                    />
+                    <select
+                      id="seatNum"
+                      onchange="clearSelectedSlot()"
+                      class="form-select mt-3"
+                    >
                       <option selected>Please select number of seats</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
@@ -83,57 +137,89 @@
                       <option value="6">6</option>
                       <option value="7">7</option>
                     </select>
-                    <button type="button" onClick="getOpenSlots()" class="btn btn-dark mt-3">Search</button>
+                    <button
+                      type="button"
+                      onClick="getOpenSlots()"
+                      class="btn btn-dark mt-3"
+                    >
+                      Search
+                    </button>
                   </div>
                   <p class="h5 mt-5">2. Select Time</p>
-                  <div id="openSlots" class="slot-container">
-                  </div>
+                  <div id="openSlots" class="slot-container"></div>
                   <div id="timeText"></div>
-
                 </form>
 
                 <p class="h5 mt-5">3. Enter Details</p>
-                <form id="formDetails" onsubmit="return false;" class="needs-validation g-3" novalidate>
+                <form
+                  id="formDetails"
+                  onsubmit="return false;"
+                  class="needs-validation g-3"
+                  novalidate
+                >
                   <div class="row mt-3">
                     <div class="col-8">
-                      <input id="firstName" type="text" class="form-control" placeholder="First name" required>
+                      <input
+                        id="firstName"
+                        type="text"
+                        class="form-control"
+                        placeholder="First name"
+                        required
+                      />
                     </div>
                   </div>
                   <div class="row mt-3">
                     <div class="col-8">
-                      <input id="phone" type="tel" class="form-control" placeholder="Phone" style="width:100%; display:block;"required/>
+                      <input
+                        id="phone"
+                        type="tel"
+                        class="form-control"
+                        placeholder="Phone"
+                        style="width: 100%; display: block"
+                        required
+                      />
                     </div>
                   </div>
                   <div class="row mt-3">
                     <div class="col">
-                      <textarea id="notes" class="form-control" placeholder="Notes" rows="8"></textarea>
+                      <textarea
+                        id="notes"
+                        class="form-control"
+                        placeholder="Notes"
+                        rows="8"
+                      ></textarea>
                     </div>
                   </div>
                 </form>
               </div>
             </div>
             <div class="modal-footer">
-              <button id="submitBtn" type="button" class="btn btn-dark">Save changes</button>
+              <button id="submitBtn" type="button" class="btn btn-dark">
+                Save changes
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div id="slotsContainer" class="mt-5 px-3 pb-5" style="margin-bottom:250px"> </div>
-
+      <div
+        id="slotsContainer"
+        class="mt-5 pb-5"
+        style="margin-bottom: 250px"
+      ></div>
     </div>
     <input type="hidden" value="" id="typeSelected" />
     <input type="hidden" value="" id="timeSelected" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.2.3/flatpickr.js"></script>
     <script>
-      $(document).ready(function() {
+      $(document).ready(function () {
         // init flatpickr
         $("#datePicker").flatpickr({
-            enableTime: false,
-            dateFormat: "F, d Y",
-            defaultDate: Date.now(),
-            onChange: () => getTimeSlots(),
+          enableTime: false,
+          dateFormat: "F, d Y",
+          defaultDate: Date.now(),
+          onChange: () => getTimeSlots(),
         });
 
         $("#reservationDate").flatpickr({
@@ -147,18 +233,18 @@
         let modal = document.getElementById("myModal");
         let btn = document.getElementById("addBtn");
         let closeBtn = document.getElementsByClassName("close")[0];
-        btn.onclick = function() {
+        btn.onclick = function () {
           modal.style.display = "block";
-        }
-        closeBtn.onclick = function() {
+        };
+        closeBtn.onclick = function () {
           modal.style.display = "none";
-        }
-        window.onclick = function(event) {
+        };
+        window.onclick = function (event) {
           if (event.target == modal) {
             modal.style.display = "none";
           }
-        }
-        $("#submitBtn").on("click", function() {
+        };
+        $("#submitBtn").on("click", function () {
           submitReservation();
           //clear form
           let elem = $("#reservationDate").flatpickr();
@@ -167,7 +253,7 @@
           $("#formDetails").trigger("reset");
         });
 
-        $("#refreshBtn").on("click", function() {
+        $("#refreshBtn").on("click", function () {
           $("#slotsContainer").html(``);
           getTimeSlots();
         });
@@ -195,13 +281,17 @@
         //show a modal with failure
       }
 
-      function newAlert (type, message) {
-          $("#alertContainer").append(`
+      function newAlert(type, message) {
+        $("#alertContainer").append(`
           <div class="alert alert-${type} alert-dismissible d-flex align-items-center fade show">
             <i class="bi-check-circle-fill"></i>
             <strong class="mx-2">Success!</strong> ${message}
           </div>`);
-          $(".alert").delay(3000).fadeOut("slow", function () { $(this).remove(); });
+        $(".alert")
+          .delay(3000)
+          .fadeOut("slow", function () {
+            $(this).remove();
+          });
       }
 
       const getTimeSlots = () => {
@@ -213,24 +303,39 @@
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>`);
-          console.log(data);
-        google.script.run.withSuccessHandler(getReservationSuccess)
-        .withFailureHandler(getReservationFailure)
-        .getReservationsByDate(data);
-      }
+        console.log(data);
+        google.script.run
+          .withSuccessHandler(getReservationSuccess)
+          .withFailureHandler(getReservationFailure)
+          .getReservationsByDate(data);
+      };
 
-      const COLUMNS = ["First Name", "Last Name", "Date", "Time", "Seats", "Counter/Table", "Notes", "E-mail", "Phone", "TimeStamp", "Uuid", "Check-in", "Cancel"];
+      const COLUMNS = [
+        "First Name",
+        "Last Name",
+        "Date",
+        "Time",
+        "Seats",
+        "Counter/Table",
+        "Notes",
+        "E-mail",
+        "Phone",
+        "TimeStamp",
+        "Uuid",
+        "Check-in",
+        "Cancel",
+      ];
 
-      function formatTimeLatin (time) {
+      function formatTimeLatin(time) {
         const hour = time.substring(0, time.indexOf(":"));
         const min = time.substring(time.indexOf(":") + 1);
         if (Number(hour) < 10) {
           return "0" + time + "AM";
         } else if (Number(hour) < 12) {
           return time + "AM";
-        } else if(time == "12:00") {
-          return "12:00PM"
-        } else if(Number(hour) < 22) {
+        } else if (time == "12:00") {
+          return "12:00PM";
+        } else if (Number(hour) < 22) {
           return "0" + (Number(hour) - 12).toString() + ":" + min + "PM";
         } else {
           return (Number(hour) - 12).toString() + ":" + min + "PM";
@@ -247,36 +352,38 @@
         let seatsPos = COLUMNS.findIndex((x) => x == "Seats");
         let notesPos = COLUMNS.findIndex((x) => x == "Notes");
         let uuidPos = COLUMNS.findIndex((x) => x == "Uuid");
+        let checkinPos = COLUMNS.findIndex((x) => x == "Check-in");
         let cancelPos = COLUMNS.findIndex((x) => x == "Cancel");
         $("#slotsContainer").html(``);
         for (let i = 0; i < data.length; i++) {
           $("#slotsContainer").append(`
           <div id="slots-${i}">
-            <h5 class="mb-2 mt-5">${formatTimeLatin(data[i].time)}</h5>
+            <h5 class="ms-3 mb-2 mt-5">${formatTimeLatin(data[i].time)}</h5>
             <div id="slotsGroup-${i}" class="list-group list-group-flush">
 
             </div>
           </div>`);
           if (data[i].info.length == 0) {
             $(`#slotsGroup-${i}`).append(`
-            <div>
+            <div class="p-3 w-100 h-5 bg-light d-flex justify-content-center align-items-center rounded-2">
               No reservation
             </div>`);
           }
           for (let j = 0; j < data[i].info.length; j++) {
             let customer = data[i].info[j];
             let first = customer[firstPos];
-            let type = customer[typePos] ? 'T' : 'B';
+            let type = customer[typePos] ? "T" : "B";
             let phone = customer[phonePos];
             let seats = customer[seatsPos];
-            let notes = customer[notesPos]? customer[notesPos] : '-';
+            let notes = customer[notesPos] ? customer[notesPos] : "-";
             let uuid = customer[uuidPos];
+            let checkin = customer[checkinPos];
             let cancel = customer[cancelPos];
             $(`#slotsGroup-${i}`).append(`
-            <div id="customer-${i}-${j}" class="list-group-item list-group-item-action flex-column align-items-start py-4 px-0">
+            <div id="customer-${i}-${j}" class="list-group-item list-group-item-action flex-column align-items-start rounded-2 p-3">
               <div id="summary-${i}-${j}" class="d-flex flex-row align-items-center justify-content-between">
-                <div id="nameContainer-${i}-${j}">
-                  <span class="p-2 h3 border">${type}${seats}</span>
+                <div id="nameContainer-${i}-${j}" class="d-flex align-items-center">
+                  <span class="p-2 h3 border rounded-2">${type}${seats}</span>
                   <span class="ms-1 h3">${first}</span>
                 </div>
               </div>
@@ -291,41 +398,52 @@
             </div>`);
             if (customer[notesPos] != "") {
               //add notification
-              $(`#summary-${i}-${j}`).append(`<i class="bi-chat-right-dots" style="font-size:22px;color:#ef4900;"></i>`);
+              $(`#summary-${i}-${j}`).append(
+                `<i class="bi-chat-right-dots" style="font-size:22px;color:#ef4900;"></i>`
+              );
             }
             if (cancel) {
-              $(`#nameContainer-${i}-${j}`).append(`<span class="text-danger ms-1">Canceled</span>`);
+              $(`#nameContainer-${i}-${j}`).append(
+                `<span class="badge bg-danger ms-2 mb-1">Canceled</span>`
+              );
+            } else if (checkin) {
+              $(`#nameContainer-${i}-${j}`).append(
+                `<small class="ms-2 badge bg-success mb-1">Checked-in</small>`
+              );
             }
             //disable closing toggle
-            $(`#cancelBtn-${i}-${j}`).click(function(e) {
-                e.stopPropagation();
-                onCancel(uuid);
+            $(`#cancelBtn-${i}-${j}`).click(function (e) {
+              e.stopPropagation();
+              onCancel(uuid);
             });
             $(`#detail-${i}-${j}`).hide();
-            $(`#customer-${i}-${j}`).click(function(){
+            $(`#customer-${i}-${j}`).click(function () {
               $(`#detail-${i}-${j}`).slideToggle();
             });
           }
         }
       }
 
-
-//============================For Modal==========================//
+      //============================For Modal==========================//
       const clearSelectedSlot = () => {
-          $("#openSlots").html(``);
-          $("#timeSelected").val("");
-          $("#typeSelected").val("");
-        }
+        $("#openSlots").html(``);
+        $("#timeSelected").val("");
+        $("#typeSelected").val("");
+      };
 
       function getTimestampFromDate(date) {
-          try {
-              if (!date) return "";
-              const dateArr = date.split("/");
-              const now = new Date(dateArr[2], parseInt(dateArr[0]) - 1, dateArr[1]);
-              return now.getTime();
-          } catch (error) {
-              return "";
-          }
+        try {
+          if (!date) return "";
+          const dateArr = date.split("/");
+          const now = new Date(
+            dateArr[2],
+            parseInt(dateArr[0]) - 1,
+            dateArr[1]
+          );
+          return now.getTime();
+        } catch (error) {
+          return "";
+        }
       }
 
       const getOpenSlots = () => {
@@ -340,8 +458,10 @@
           date: $("#reservationDate").val(),
           seats: $("#seatNum").val(),
         };
-        google.script.run.withSuccessHandler(gotSlots).getAvailableSlots(dataToSend);
-      }
+        google.script.run
+          .withSuccessHandler(gotSlots)
+          .getAvailableSlots(dataToSend);
+      };
 
       function gotSlots(result) {
         const slots = JSON.parse(result);
@@ -355,7 +475,7 @@
         if (min < 10) {
           min = "0" + min;
         }
-        return hr + ':' + min;
+        return hr + ":" + min;
       }
 
       function setSlots(slots) {
@@ -366,13 +486,17 @@
           for (i = 0; i < slots.length; i++) {
             $("#openSlots").append(`
               <input type="radio" class="btn-check" name="options-outlined" id="openSlot-${i}" autocomplete="off">
-              <label class="btn btn-outline-dark" for="openSlot-${i}">${formatTime(slots[i].time)}</label>
+              <label class="btn btn-outline-dark" for="openSlot-${i}">${formatTime(
+              slots[i].time
+            )}</label>
             `);
 
-            $(`#openSlot-${i}`).on("click", {'param': slots[i]}, function(e) {
+            $(`#openSlot-${i}`).on("click", { param: slots[i] }, function (e) {
               let type = e.data.param.isTable ? "Table" : "Bar";
               if ($("#typeSelected").val() == "") {
-                $("#openSlots").append(`<div id="tableType" class="mt-2">Seat type: ${type}</div>`);
+                $("#openSlots").append(
+                  `<div id="tableType" class="mt-2">Seat type: ${type}</div>`
+                );
               } else {
                 $("#tableType").text(`Seat type: ${type}`);
               }
@@ -386,44 +510,56 @@
       function submitSuccess() {
         let modal = document.getElementById("myModal");
         modal.style.display = "none";
-        newAlert('success', 'Reservation added successfully');
+        newAlert("success", "Reservation added successfully");
 
         //reload slots
         getTimeSlots();
       }
 
       function submitFailure(error) {
-        newAlert('danger', error);
+        newAlert("danger", error);
         getTimeSlots();
       }
 
       function cancelSuccess() {
-        newAlert('success', 'Canceled successfully');
+        newAlert("success", "Canceled successfully");
         getTimeSlots();
       }
 
       function cancelFailure(error) {
-        newAlert('danger', error);
+        newAlert("danger", error);
         getTimeSlots();
       }
 
       const onCancel = (uuid) => {
-        google.script.run.withSuccessHandler(cancelSuccess()).withFailureHandler(cancelFailure).cancelByUuid(uuid);
-      }
+        google.script.run
+          .withSuccessHandler(cancelSuccess())
+          .withFailureHandler(cancelFailure)
+          .cancelByUuid(uuid);
+      };
 
       const submitReservation = () => {
         let firstName = $("#firstName").val();
         let date = $("#reservationDate").val();
-        let time = $("#timeSelected").val()
+        let time = $("#timeSelected").val();
         let seats = $("#seatNum").val();
         let isTable = $("#typeSelected").val();
         let notes = $("#notes").val();
         let phone = phoneInput.getNumber();
         let dataToSend = {
-          firstName, date, time, seats, isTable, notes, phone,
-        }
-        google.script.run.withSuccessHandler(submitSuccess()).withFailureHandler(submitFailure).addAdminReservation(dataToSend);
-      }
+          firstName,
+          date,
+          time,
+          seats,
+          isTable,
+          notes,
+          phone,
+        };
+        google.script.run
+          .withSuccessHandler(submitSuccess())
+          .withFailureHandler(submitFailure)
+          .addAdminReservation(dataToSend);
+      };
     </script>
   </body>
 </html>
