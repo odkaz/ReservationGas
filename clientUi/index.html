@@ -285,7 +285,9 @@
         $("#alertContainer").append(`
           <div class="alert alert-${type} alert-dismissible d-flex align-items-center fade show">
             <i class="bi-check-circle-fill"></i>
-            <strong class="mx-2">Success!</strong> ${message}
+            <strong class="mx-2">${
+              type == "success" ? "Success!" : "Failure!"
+            }</strong> ${message}
           </div>`);
         $(".alert")
           .delay(3000)
@@ -424,6 +426,10 @@
               e.stopPropagation();
               onCancel(uuid);
             });
+            $(`#checkBtn-${i}-${j}`).click(function (e) {
+              e.stopPropagation();
+              onCheckin(uuid);
+            });
             $(`#detail-${i}-${j}`).hide();
             $(`#customer-${i}-${j}`).click(function () {
               $(`#detail-${i}-${j}`).slideToggle();
@@ -528,6 +534,23 @@
         newAlert("danger", error);
         getTimeSlots();
       }
+
+      function checkinSuccess() {
+        newAlert("success", "Checked in successfully");
+        getTimeSlots();
+      }
+
+      function checkinFailure(error) {
+        newAlert("danger", error);
+        getTimeSlots();
+      }
+
+      const onCheckin = (uuid) => {
+        google.script.run
+          .withSuccessHandler(checkinSuccess())
+          .withFailureHandler(checkinFailure)
+          .checkinByUuid(uuid);
+      };
 
       function cancelSuccess() {
         newAlert("success", "Canceled successfully");
