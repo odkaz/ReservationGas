@@ -17,7 +17,7 @@ function getReserved(date) {
   let cancelPos = COLUMNS.findIndex((x) => x == "Cancel");
   let search = new Date(date);
   let sheet = SpreadsheetApp.getActive().getSheetByName('history');
-  if(sheet.getLastRow() == 1) {
+  if (sheet.getLastRow() == 1) {
     return [];
   }
   let values = sheet.getRange('A2:M').getValues();

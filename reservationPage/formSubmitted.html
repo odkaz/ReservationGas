@@ -1,60 +1,84 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base target="_top">
+    <base target="_top" />
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
   </head>
-   <body>
-    <div id="submitFail" style="display:none;">
-      Sorry, the date was already taken by another person. Please select another date.
+  <body>
+    <div id="submitFail" style="display: none">
+      Sorry, the date was already taken by another person. Please select another
+      date.
     </div>
-    <div id="submitSuccess" style="display:none;">
+    <div id="submitSuccess" style="display: none">
       <div class="vh-100 d-flex justify-content-center align-items-center p-5">
         <div class="col-md-4 bg-white p-5 card shadow">
-            <div class="mb-4 text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="text-success" width="75" height="75"
-                    fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
-                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                    <path
-                        d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
-                </svg>
-            </div>
-            <div class="text-center">
-                <h1>Thank you!</h1>
-                <p>Your reservation was successful, and we have sent you a confirmation email.</p>
-                <button onclick="Back()" class="btn btn-outline-dark">Back Home</button>
-            </div>
+          <div class="mb-4 text-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="text-success"
+              width="75"
+              height="75"
+              fill="currentColor"
+              class="bi bi-check-circle"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+              />
+              <path
+                d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"
+              />
+            </svg>
+          </div>
+          <div class="text-center">
+            <h1>Thank you!</h1>
+            <p>
+              Your reservation was successful, and we have sent you a
+              confirmation email.
+            </p>
+            <button onclick="Back()" class="btn btn-outline-dark">
+              Back Home
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
     <input type="hidden" value="<?= error ?>" id="error" />
     <?var url = getUrl();?><input type="hidden" value="<?= url ?>" id="url" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-      window.onload = function() {
+      window.onload = function () {
         let err = $("#error").val();
-        if (err == 'true') {
+        if (err == "true") {
           $("#submitFail").show();
         } else {
           $("#submitSuccess").show();
         }
       };
-      function Back()
-      {
+      function Back() {
         var url = "https://itosugikappocuisine.ca/";
-        var link = document.createElement('a');
+        var link = document.createElement("a");
         link.href = url;
-        link.id = 'linkURL';
+        link.id = "linkURL";
         document.body.appendChild(link);
         document.getElementById("linkURL").click();
       }
-      </script>
-   </body>
+    </script>
+  </body>
 </html>

@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <base target="_top">
+    <base target="_top" />
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
 
     <style>
       body {
@@ -20,26 +25,24 @@
       <h3>Your reservation details</h3>
       <ul id="details" class="list-group list-group-flush mt-2"></ul>
     </div>
-    <div id="containerAfter">
-      Successfully canceled reservation
-    </div>
+    <div id="containerAfter">Successfully canceled reservation</div>
 
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <input type="hidden" value="<?= uuid ?>" id="uuid" />
     <script>
-      window.onload = function() {
+      window.onload = function () {
         $("#containerAfter").hide();
         getDetails();
       };
       function getDetails() {
         let uuid = document.getElementById("uuid").value;
         google.script.run.withSuccessHandler(gotDetails).getDetailsByUuid(uuid);
-
       }
 
       function gotDetails(result) {
@@ -48,8 +51,7 @@
           <li class="list-group-item">${result.first} ${result.last}</li>
           <li class="list-group-item">Date: ${result.date}</li>
           <li class="list-group-item">Time: ${result.time}</li>
-          <li class="list-group-item">Seats: ${result.seats}</li>`
-        );
+          <li class="list-group-item">Seats: ${result.seats}</li>`);
         if (result.type) {
           $("#details").append(`<li class="list-group-item">Counter seat</li>`);
         } else {
@@ -67,8 +69,10 @@
           Cancelations are available 24h prior to your reserved time.</br>
           If you wish to make any cancels within 24h, please consult directly by phone to 604-779-8528
         </div>`);
-        $("#cancelBtn").on("click", {'param': uuid}, function(e) {
-          google.script.run.withSuccessHandler(cancelHandler).cancelByUuid(uuid);
+        $("#cancelBtn").on("click", { param: uuid }, function (e) {
+          google.script.run
+            .withSuccessHandler(cancelHandler)
+            .cancelByUuid(uuid);
         });
       }
 

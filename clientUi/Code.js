@@ -21,7 +21,7 @@ function getReserved(date, includeCancels) {
   let cancelPos = COLUMNS.findIndex((x) => x == "Cancel");
   let search = new Date(date);
   let sheet = SpreadsheetApp.getActive().getSheetByName('history');
-  if(sheet.getLastRow() == 1) {
+  if (sheet.getLastRow() == 1) {
     return [];
   }
   let values = sheet.getRange('A2:M').getValues();
@@ -124,11 +124,11 @@ function updateFilterView() {
 }
 
 function checkReservation(date, time, seats, isTable) {
-  let shifts = JSON.parse(getAvailableSlots({date, seats}));
+  let shifts = JSON.parse(getAvailableSlots({ date, seats }));
   for (let i = 0; i < shifts.length; i++) {
     if (time == formatTime(shifts[i].time)
-      &&isTable == shifts[i].isTable) {
-        return true;
+      && isTable == shifts[i].isTable) {
+      return true;
     }
   }
   return false;
@@ -142,6 +142,6 @@ function addAdminReservation(data) {
     sheet.appendRow([data.firstName, "(Added by Admin)", data.date, data.time, data.seats, data.isTable, data.notes, "admin@example.com", data.phone, timeStamp, uuid]);
     updateFilterView();
   } else {
-    throw new Error( "The slot is no longer available");
+    throw new Error("The slot is no longer available");
   }
 }

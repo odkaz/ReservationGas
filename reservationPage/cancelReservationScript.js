@@ -2,8 +2,8 @@ function getDetailsByUuid(uuid) {
   let ss = SpreadsheetApp.getActiveSpreadsheet();
   let histSheet = ss.getSheetByName("history");
   let uuidPos = COLUMNS.findIndex((x) => x == "Uuid");
-  for(let i = 2; i <= histSheet.getLastRow(); i++) {
-    if(histSheet.getRange(i, uuidPos + 1).getValue() == uuid) {
+  for (let i = 2; i <= histSheet.getLastRow(); i++) {
+    if (histSheet.getRange(i, uuidPos + 1).getValue() == uuid) {
       let firstPos = COLUMNS.findIndex((x) => x == "First Name");
       let lastPos = COLUMNS.findIndex((x) => x == "Last Name");
       let datePos = COLUMNS.findIndex((x) => x == "Date");
@@ -31,8 +31,8 @@ function cancelByUuid(uuid) {
   let cancelSheet = ss.getSheetByName("cancels");
   let uuidPos = COLUMNS.findIndex((x) => x == "Uuid");
 
-  for(let i = 2; i <= histSheet.getLastRow(); i++) {
-    if(histSheet.getRange(i, uuidPos + 1).getValue() == uuid) {
+  for (let i = 2; i <= histSheet.getLastRow(); i++) {
+    if (histSheet.getRange(i, uuidPos + 1).getValue() == uuid) {
       let row = histSheet.getRange(i, 1, 1, histSheet.getLastColumn()).getValues();
       let cancelPos = COLUMNS.findIndex((x) => x == "Cancel");
       row[0][cancelPos] = true;
