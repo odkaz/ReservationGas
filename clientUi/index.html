@@ -547,7 +547,7 @@
 
       const onCheckin = (uuid) => {
         google.script.run
-          .withSuccessHandler(checkinSuccess())
+          .withSuccessHandler(checkinSuccess)
           .withFailureHandler(checkinFailure)
           .checkinByUuid(uuid);
       };
@@ -564,7 +564,7 @@
 
       const onCancel = (uuid) => {
         google.script.run
-          .withSuccessHandler(cancelSuccess())
+          .withSuccessHandler(cancelSuccess)
           .withFailureHandler(cancelFailure)
           .cancelByUuid(uuid);
       };
@@ -587,7 +587,7 @@
           phone,
         };
         google.script.run
-          .withSuccessHandler(submitSuccess())
+          .withSuccessHandler(submitSuccess)
           .withFailureHandler(submitFailure)
           .addAdminReservation(dataToSend);
       };
