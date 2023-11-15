@@ -13,9 +13,10 @@ function addReservation(data) {
   // let url = ScriptApp.getService().getUrl() + '?uuid=' + uuid + '&page=cancelReservation';
   let type = (data.isTable == 'true') ? 'Table' : 'Bar';
   let msg = getMessage(data.date, data.time, type);
+  let msgSms = getMessageSms(data.date, data.time, type);
 
-  sendSms(data.phone, msg);
   sendMail(data.email, msg);
+  sendSms(data.phone, msgSms);
 }
 
 function checkReservation(date, time, seats, isTable) {
@@ -44,6 +45,34 @@ function updateFilterView() {
     filter.remove();
   }
   dataSheet.getRange('A1:M').createFilter();
+}
+
+function getMessageSms(date, time, type) {
+  let message =
+    `
+Thank you for booking your reservation with us. Your reservation is as follows.
+
+Date: ${date}
+Time: ${time}
+Seat Type: ${type}
+
+If you would like to request any special arrangements or make any changes to your reservation, please do not hesitate to call us directly ((604) 779-8528). This is an automated email so please do not reply to this email.
+
+No-shows or cancellations less than 48 hours in advance may be subject to the following charges:
+    * Lunch reservations: $45 per guest.
+    * Dinner reservations: $78 per guest.
+Changes to the guest count made less than 48 hours in advance may be subject to the same charges stated above. To cancel or modify your reservation, please contact us at (604) 779-8528.
+
+We hope to see you soon!
+
+
+Itosugi Kappo Cuisine
+
+3648 W Broadway
+Vancouver, BC.
+
+(604) 779-8528`;
+  return message;
 }
 
 function getMessage(date, time, type) {
