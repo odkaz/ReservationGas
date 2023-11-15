@@ -17,10 +17,7 @@ function doGet(e) {
   }
   else if (e.parameter['page'] == 'registerCard') {
     var htmlOutput = HtmlService.createTemplateFromFile('registerCard');
-    return htmlOutput.evaluate()
-      .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
-      .addMetaTag("viewport", "width=device-width, initial-scale=1");
+    return htmlOutput.evaluate().addMetaTag("viewport", "width=device-width, initial-scale=1");
   }
   else if (e.parameter['page'] == 'formSubmitted') {
     var htmlOutput = HtmlService.createTemplateFromFile('formSubmitted');
