@@ -12,11 +12,10 @@ function addReservation(data) {
   //sms and mail
   // let url = ScriptApp.getService().getUrl() + '?uuid=' + uuid + '&page=cancelReservation';
   let type = (data.isTable == 'true') ? 'Table' : 'Bar';
-  let msg = getMessage(data.date, data.time, type);
+  let msg = getMessageMail(data.date, data.time, type);
   let msgSms = getMessageSms(data.date, data.time, type);
-
-  sendMail(data.email, msg);
-  sendSms(data.phone, msgSms);
+  sendMail(data.email, "Confirmation of reservation at Itosugi", msg);
+  // sendSms(data.phone, msgSms);
 }
 
 function checkReservation(date, time, seats, isTable) {
@@ -75,7 +74,7 @@ Vancouver, BC.
   return message;
 }
 
-function getMessage(date, time, type) {
+function getMessageMail(date, time, type) {
   let message =
     `<div>
 
@@ -87,7 +86,11 @@ Seat Type: ${type}<br>
 <br>
 If you would like to request any special arrangements or make any changes to your reservation, please do not hesitate to call us directly ((604) 779-8528). <b>This is an automated email so please do not reply to this email.</b><br>
 <br>
-We take great care to minimize food waste. If you need to cancel your reservation, please notify us at least 48 hours in advance.<br>
+No-shows or cancellations less than 48 hours in advance may be subject to the following charges:<br>
+<ul>
+  <li>Lunch reservations: $45 per guest.</li>
+  <li>Dinner reservations: $78 per guest.</li>
+</ul>
 <br>
 We hope to see you soon!<br>
 <br>
