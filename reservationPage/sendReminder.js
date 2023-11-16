@@ -1,22 +1,46 @@
 function findReminderTarget() {
-	const today = new Date();
-	const nextThreeDays = new Date(today.setDate(today.getDate() + 3));
-	console.log(formatDate(nextThreeDays));
+	let now = new Date();
+	now.setHours(now.getHours() - 8);
+	let nextThreeDays = new Date(now.setDate(now.getDate() + 3));
+	let timePos = COLUMNS.findIndex((x) => x == "Time");
+	let res = [];
+	let slots = getSlots(nextThreeDays);
+	for (let i = 0; i < slots.length; i++) {
+		let startTime = slots[i].getStartTime();
+		if (!isSameTime(startTime, now)) {
+			continue;
+		}
+		let reserved = getReserved(nextThreeDays);
+		for (let i = 0; i < reserved.length; i++) {
+			if (isSameTime(reserved[i][timePos], now)) {
+				res.push(reserved[i]);
+			}
+		}
+	}
+	return res;
 }
 
-
 function sendReminder() {
-	let date = '2023-01-01';
-	let time = '12:15';
-	let isTable = 'true';
-	let email = '112kazuma@gmail.com';
-	let phone = '+769426915';
-	let type = (isTable == 'true') ? 'Table' : 'Bar';
-	let msg = getReminderMail(date, time, type);
-	let msgSms = getReminderSms(date, time, type);
+	let targets = findReminderTarget();
 
-	sendMail(email, 'Reminder for your upcoming reservation', msg);
-	sendSms(phone, msgSms);
+	for (let i = 0; i < targets.length; i++) {
+		let datePos = COLUMNS.findIndex((x) => x == "Date");
+		let timePos = COLUMNS.findIndex((x) => x == "Time");
+		let typePos = COLUMNS.findIndex((x) => x == "Counter/Table");
+		let emailPos = COLUMNS.findIndex((x) => x == "E-mail");
+		let phonePos = COLUMNS.findIndex((x) => x == "Phone");
+		let date = formatDate(targets[i][datePos]);
+		let time = formatTime(targets[i][timePos]);
+		let isTable = targets[i][typePos];
+		let email = targets[i][emailPos];
+		let phone = targets[i][phonePos];
+		let type = (isTable == 'true') ? 'Table' : 'Bar';
+		let msg = getReminderMail(date, time, type);
+		let msgSms = getReminderSms(date, time, type);
+
+		sendMail(email, 'Reminder for your upcoming reservation', msg);
+		sendSms(phone, msgSms);
+	}
 }
 
 function getReminderMail(date, time, type) {
