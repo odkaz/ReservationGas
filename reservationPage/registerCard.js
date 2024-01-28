@@ -55,11 +55,11 @@ Date: ${date}
 Time: ${time}
 Seat Type: ${type}
 
-If you would like to request any special arrangements or make any changes to your reservation, please do not hesitate to call us directly ((604) 779-8528). This is an automated email so please do not reply to this email.
+If you would like to make any changes to your reservation, please text us at (604) 779-8528. This is an automated email so please do not reply to this message.
 
 No-shows or cancellations less than 48 hours in advance may be subject to the following charges:
-    * Lunch reservations: $45 per guest.
-    * Dinner reservations: $78 per guest.
+    * Lunch reservations: $55 per guest.
+    * Dinner reservations: $88 per guest.
 Changes to the guest count made less than 48 hours in advance may be subject to the same charges stated above. To cancel or modify your reservation, please contact us at (604) 779-8528.
 
 We hope to see you soon!
@@ -84,12 +84,12 @@ Date: ${date}<br>
 Time: ${time}<br>
 Seat Type: ${type}<br>
 <br>
-If you would like to request any special arrangements or make any changes to your reservation, please do not hesitate to call us directly ((604) 779-8528). <b>This is an automated email so please do not reply to this email.</b><br>
+If you would like to make any changes to your reservation, please text us at (604) 779-8528. <b>This is an automated email so please do not reply to this email.</b><br>
 <br>
 No-shows or cancellations less than 48 hours in advance may be subject to the following charges:<br>
 <ul>
-  <li>Lunch reservations: $45 per guest.</li>
-  <li>Dinner reservations: $78 per guest.</li>
+  <li>Lunch reservations: $55 per guest.</li>
+  <li>Dinner reservations: $88 per guest.</li>
 </ul>
 <br>
 We hope to see you soon!<br>

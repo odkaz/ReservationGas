@@ -82,8 +82,8 @@ function getReminderSms(date, time, type) {
   If you would like to request any special arrangements or make any changes to your reservation, please do not hesitate to call us directly ((604) 779-8528). This is an automated email so please do not reply to this email.
 
   No-shows or cancellations less than 48 hours in advance may be subject to the following charges:
-	  * Lunch reservations: $45 per guest.
-	  * Dinner reservations: $78 per guest.
+	  * Lunch reservations: $55 per guest.
+	  * Dinner reservations: $88 per guest.
   Changes to the guest count made less than 48 hours in advance may be subject to the same charges stated above. To cancel or modify your reservation, please contact us at (604) 779-8528.
 
   We hope to see you soon!
