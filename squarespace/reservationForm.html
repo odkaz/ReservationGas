@@ -32,6 +32,12 @@
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
+    <!-- awsome font -->
+    <script
+      src="https://kit.fontawesome.com/8ac6552500.js"
+      crossorigin="anonymous"
+    ></script>
+
     <style>
       /* date form */
       .date-container {
@@ -552,7 +558,6 @@
               'click',
               { param: slots.lunch[i] },
               function (e) {
-                console.log(e)
                 setDate(e.data.param)
                 $('#dateForm').hide()
                 $('#personalInfo').show()
@@ -708,7 +713,6 @@
                 event.preventDefault()
                 event.stopPropagation()
               } else {
-                console.log('submit')
                 submitReservation()
               }
               form.classList.add('was-validated')
@@ -749,7 +753,6 @@
           phone,
           timeStamp,
         }
-        console.log(dataToSend)
         postReservation(dataToSend)
       }
 
