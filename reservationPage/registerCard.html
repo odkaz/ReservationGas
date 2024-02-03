@@ -26,7 +26,7 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Poppins", sans-serif;
+        font-family: 'Poppins', sans-serif;
       }
 
       .container {
@@ -96,7 +96,9 @@
   <body>
     <div class="container">
       <div class="text-black-50">
-        <h5 class="fw-bold text-dark mb-4">Your reservation is almost complete!</h5>
+        <h5 class="fw-bold text-dark mb-4">
+          Your reservation is almost complete!
+        </h5>
         <div class="mb-5">
           <p>
             This restaurant requires a credit card to secure this reservation.
@@ -109,8 +111,8 @@
             <li>Dinner: $88 per guest.</li>
           </ul>
           <p>
-            Changes to the guest count made less than 48 hours in advance may also be
-            subject to the same charges stated above.
+            Changes to the guest count made less than 48 hours in advance may
+            also be subject to the same charges stated above.
           </p>
         </div>
 
@@ -184,54 +186,54 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
       $(document).ready(function () {
-        enableValidation();
-      });
+        enableValidation()
+      })
 
       // Example starter JavaScript for disabling form submissions if there are invalid fields
       const enableValidation = () => {
-        "use strict";
+        'use strict'
 
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.querySelectorAll(".needs-validation");
+        var forms = document.querySelectorAll('.needs-validation')
 
         // Loop over them and prevent submission
         Array.prototype.slice.call(forms).forEach(function (form) {
           form.addEventListener(
-            "submit",
+            'submit',
             function (event) {
               if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
+                event.preventDefault()
+                event.stopPropagation()
               } else {
-                console.log("submit");
-                submitReservation();
+                console.log('submit')
+                submitReservation()
               }
-              form.classList.add("was-validated");
+              form.classList.add('was-validated')
             },
             false
-          );
-        });
-      };
+          )
+        })
+      }
 
       const submitReservation = () => {
-        $("#submitBtn").addClass("disabled");
-        $("#submitBtn").html(`
+        $('#submitBtn').addClass('disabled')
+        $('#submitBtn').html(`
           <div class="d-flex justify-content-center">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
-        `);
-        let firstName = localStorage.getItem("firstName");
-        let lastName = localStorage.getItem("lastName");
-        let date = localStorage.getItem("date");
-        let time = localStorage.getItem("time");
-        let seats = localStorage.getItem("seats");
-        let isTable = localStorage.getItem("isTable");
-        let notes = localStorage.getItem("notes");
-        let email = localStorage.getItem("email");
-        let phone = localStorage.getItem("phone");
-        let timeStamp = Date.now();
+        `)
+        let firstName = localStorage.getItem('firstName')
+        let lastName = localStorage.getItem('lastName')
+        let date = localStorage.getItem('date')
+        let time = localStorage.getItem('time')
+        let seats = localStorage.getItem('seats')
+        let isTable = localStorage.getItem('isTable')
+        let notes = localStorage.getItem('notes')
+        let email = localStorage.getItem('email')
+        let phone = localStorage.getItem('phone')
+        let timeStamp = Date.now()
         let dataToSend = {
           firstName,
           lastName,
@@ -243,30 +245,30 @@
           email,
           phone,
           timeStamp,
-        };
-        console.log(dataToSend);
+        }
+        console.log(dataToSend)
         google.script.run
           .withSuccessHandler(bookSuccess)
           .withFailureHandler(bookError)
-          .addReservation(dataToSend);
-      };
+          .addReservation(dataToSend)
+      }
 
       const bookSuccess = () => {
-        toLink(false);
-      };
+        toLink(false)
+      }
 
       const bookError = (error) => {
-        console.log(error);
-        toLink(true);
-      };
+        console.log(error)
+        toLink(true)
+      }
 
       function toLink(error) {
-        var url = document.getElementById("url").value;
-        var link = document.createElement("a");
-        link.href = url + "?page=formSubmitted&error=" + error;
-        link.id = "linkURL";
-        document.body.appendChild(link);
-        document.getElementById("linkURL").click();
+        var url = document.getElementById('url').value
+        var link = document.createElement('a')
+        link.href = url + '?page=formSubmitted&error=' + error
+        link.id = 'linkURL'
+        document.body.appendChild(link)
+        document.getElementById('linkURL').click()
       }
     </script>
   </body>

@@ -33,12 +33,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
     <style>
+      /* date form */
       .date-container {
         border: 2px solid whitesmoke;
         border-radius: 10px;
         padding: 40px;
       }
 
+      /* personal info */
       .table-text {
         width: 100%;
         padding: 10px 20px;
@@ -64,6 +66,70 @@
 
       .iti {
         width: 100%;
+      }
+
+      /* card */
+      .card-container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 30px;
+      }
+
+      .textmuted {
+        color: #7a7a7a;
+      }
+
+      .h7 {
+        font-size: 15px;
+      }
+
+      .h8 {
+        font-size: 12px;
+      }
+
+      .h9 {
+        font-size: 10px;
+      }
+
+      .card input::placeholder {
+        font-size: 14px;
+      }
+
+      ::placeholder {
+        font-size: 14px;
+      }
+
+      input.card {
+        position: relative;
+      }
+
+      .far.fa-credit-card {
+        position: absolute;
+        top: 10px;
+        padding: 0 15px;
+      }
+
+      .fas,
+      .far {
+        cursor: pointer;
+      }
+
+      .cursor {
+        cursor: pointer;
+      }
+
+      @media (max-width: 320px) {
+        .h8 {
+          font-size: 11px;
+        }
+
+        .h7 {
+          font-size: 13px;
+        }
+
+        ::placeholder {
+          font-size: 10px;
+        }
       }
     </style>
   </head>
@@ -257,6 +323,94 @@
         </form>
         <div class="alert alert-info" style="display: none"></div>
       </div>
+    </div>
+
+    <div class="card-container">
+      <div class="text-black-50">
+        <h5 class="fw-bold text-dark mb-4">
+          Your reservation is almost complete!
+        </h5>
+        <div class="mb-5">
+          <p>
+            This restaurant requires a credit card to secure this reservation.
+            All credit card information will be processed securely. No-shows or
+            cancellations less than 48 hours in advance may be subject to the
+            following charges:
+          </p>
+          <ul>
+            <li>Lunch: $55 per guest.</li>
+            <li>Dinner: $88 per guest.</li>
+          </ul>
+          <p>
+            Changes to the guest count made less than 48 hours in advance may
+            also be subject to the same charges stated above.
+          </p>
+        </div>
+
+        <h5 class="fw-bold text-dark">
+          How to Cancel or Modify a Reservation:
+        </h5>
+        <p class="mb-5">
+          To cancel or modify your reservation, please contact us at (604)
+          779-8528.
+        </p>
+      </div>
+      <form
+        onsubmit="return false;"
+        class="needs-validation mb-5 rounded p-3 shadow"
+        novalidate
+      >
+        <p class="fw-bold mb-1">Card Information</p>
+        <div class="row mb-3 mt-4">
+          <div class="col-12">
+            <div class="card border-0">
+              <input
+                class="form-control ps-5"
+                type="text"
+                placeholder="Card number"
+                required
+              />
+              <span class="far fa-credit-card"></span>
+            </div>
+          </div>
+          <div class="col-6">
+            <input
+              class="form-control my-3"
+              type="text"
+              placeholder="MM/YY"
+              required
+            />
+          </div>
+          <div class="col-6">
+            <input
+              class="form-control my-3"
+              type="text"
+              placeholder="cvv"
+              required
+            />
+          </div>
+          <div class="col-12">
+            <div class="form-check flex items-center">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="check"
+                required
+              />
+              <label class="form-check-label h7" for="check">
+                I understand and agree to the restaurant's cancellation policy.
+              </label>
+            </div>
+          </div>
+        </div>
+        <button
+          id="submitBtn"
+          type="submit"
+          class="btn btn-dark d-block h8 w-100"
+        >
+          Submit Reservation
+        </button>
+      </form>
     </div>
 
     <input type="hidden" value="" id="date" />
@@ -492,6 +646,93 @@
           return false
         }
         return true
+      }
+
+      //   card form
+      function cardReady() {
+        enableEmptyCheck()
+      }
+
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      const enableEmptyCheck = () => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms).forEach(function (form) {
+          form.addEventListener(
+            'submit',
+            function (event) {
+              if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+              } else {
+                console.log('submit')
+                submitReservation()
+              }
+              form.classList.add('was-validated')
+            },
+            false
+          )
+        })
+      }
+
+      const submitReservation = () => {
+        $('#submitBtn').addClass('disabled')
+        $('#submitBtn').html(`
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        `)
+        let firstName = localStorage.getItem('firstName')
+        let lastName = localStorage.getItem('lastName')
+        let date = localStorage.getItem('date')
+        let time = localStorage.getItem('time')
+        let seats = localStorage.getItem('seats')
+        let isTable = localStorage.getItem('isTable')
+        let notes = localStorage.getItem('notes')
+        let email = localStorage.getItem('email')
+        let phone = localStorage.getItem('phone')
+        let timeStamp = Date.now()
+        let dataToSend = {
+          firstName,
+          lastName,
+          date,
+          time,
+          seats,
+          isTable,
+          notes,
+          email,
+          phone,
+          timeStamp,
+        }
+        console.log(dataToSend)
+        google.script.run
+          .withSuccessHandler(bookSuccess)
+          .withFailureHandler(bookError)
+          .addReservation(dataToSend)
+      }
+
+      const bookSuccess = () => {
+        toLink(false)
+      }
+
+      const bookError = (error) => {
+        console.log(error)
+        toLink(true)
+      }
+
+      function toLink(error) {
+        var url = document.getElementById('url').value
+        var link = document.createElement('a')
+        link.href = url + '?page=formSubmitted&error=' + error
+        link.id = 'linkURL'
+        document.body.appendChild(link)
+        document.getElementById('linkURL').click()
       }
     </script>
   </body>
