@@ -430,7 +430,8 @@
         'https://script.google.com/macros/s/AKfycbwc-Iv_AxpWb0LWHDgcG5Xep9vPfmCDOvsgI_0lrSOZwRtFPceMWy7va6YuFdInowmk/exec'
 
       $(document).ready(() => {
-        // $('#personalInfo').hide()
+        $('#personalInfo').hide()
+        $('#cardContainer').hide()
       })
 
       $('#datePicker').flatpickr({
@@ -720,24 +721,6 @@
         } catch (err) {
           console.log(err)
         }
-      }
-
-      const bookSuccess = () => {
-        toLink(false)
-      }
-
-      const bookError = (error) => {
-        console.log(error)
-        toLink(true)
-      }
-
-      function toLink(error) {
-        var url = document.getElementById('url').value
-        var link = document.createElement('a')
-        link.href = url + '?page=formSubmitted&error=' + error
-        link.id = 'linkURL'
-        document.body.appendChild(link)
-        document.getElementById('linkURL').click()
       }
     </script>
   </body>
