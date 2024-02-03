@@ -21,6 +21,15 @@ function doGet(e) {
         ContentService.MimeType.JSON
       )
     }
+    if (e.parameter['api'] == 'addReservation') {
+      var data = {
+        ...e.parameter,
+      }
+      var res = addReservation(data)
+      return ContentService.createTextOutput(res).setMimeType(
+        ContentService.MimeType.JSON
+      )
+    }
   } else if (e.parameter['page'] == 'personalInfo') {
     var htmlOutput = HtmlService.createTemplateFromFile('personalInfo')
     htmlOutput.date = e.parameter['date']
@@ -52,18 +61,6 @@ function doGet(e) {
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
       .addMetaTag('viewport', 'width=device-width, initial-scale=1')
   }
-}
-
-function doPost(e) {
-  var data = JSON.parse(e.postData.contents)
-  if (!e.parameter.api) {
-    return ContentService.createTextOutput('no route found')
-  }
-  if (e.parameter['api'] == 'addReservation') {
-    var result = addReservation(data)
-    return ContentService.createTextOutput(result)
-  }
-  return ContentService.createTextOutput('error: in do post')
 }
 
 function getUrl() {

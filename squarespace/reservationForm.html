@@ -325,7 +325,7 @@
       </div>
     </div>
 
-    <div class="card-container">
+    <div id="cardContainer" class="card-container">
       <div class="text-black-50">
         <h5 class="fw-bold text-dark mb-4">
           Your reservation is almost complete!
@@ -357,7 +357,7 @@
       </div>
       <form
         onsubmit="return false;"
-        class="needs-validation mb-5 rounded p-3 shadow"
+        class="empty-validation mb-5 rounded p-3 shadow"
         novalidate
       >
         <p class="fw-bold mb-1">Card Information</p>
@@ -610,6 +610,9 @@
                 event.stopPropagation()
               } else {
                 setPersonalInfo()
+                $('#personalInfo').hide()
+                $('#cardContainer').show()
+                cardReady()
               }
               form.classList.add('was-validated')
             },
@@ -653,14 +656,9 @@
         enableEmptyCheck()
       }
 
-      // Example starter JavaScript for disabling form submissions if there are invalid fields
       const enableEmptyCheck = () => {
         'use strict'
-
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.querySelectorAll('.needs-validation')
-
-        // Loop over them and prevent submission
+        var forms = document.querySelectorAll('.empty-validation')
         Array.prototype.slice.call(forms).forEach(function (form) {
           form.addEventListener(
             'submit',
@@ -711,10 +709,17 @@
           timeStamp,
         }
         console.log(dataToSend)
-        google.script.run
-          .withSuccessHandler(bookSuccess)
-          .withFailureHandler(bookError)
-          .addReservation(dataToSend)
+        postReservation(dataToSend)
+      }
+
+      async function postReservation(data) {
+        const url = `${GAS_URL}?api=addReservation&firstName=${data.firstName}&lastName=${data.lastName}&date=${data.date}&time=${data.time}&seats=${data.seats}&isTable=${data.isTable}&notes=${data.notes}&email=${data.email}&phone=${data.phone}&timeStamp=${data.timeStamp}`
+        try {
+          const response = await fetch(url)
+          console.log('response:', response)
+        } catch (err) {
+          console.log(err)
+        }
       }
 
       const bookSuccess = () => {
